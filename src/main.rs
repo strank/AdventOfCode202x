@@ -1,22 +1,22 @@
-#[path = "../day16/tickets.rs"]
+#[path = "../2020/day16/tickets.rs"]
 mod day16;
-#[path = "../day17/conway_cubes.rs"]
+#[path = "../2020/day17/conway_cubes.rs"]
 mod day17;
-#[path = "../day18/expr_parser.rs"]
+#[path = "../2020/day18/expr_parser.rs"]
 mod day18;
-#[path = "../day19/peg_parser.rs"]
+#[path = "../2020/day19/peg_parser.rs"]
 mod day19;
-#[path = "../day20/image_tiles.rs"]
+#[path = "../2020/day20/image_tiles.rs"]
 mod day20;
-#[path = "../day21/allergens.rs"]
+#[path = "../2020/day21/allergens.rs"]
 mod day21;
-#[path = "../day22/crab_combat.rs"]
+#[path = "../2020/day22/crab_combat.rs"]
 mod day22;
-#[path = "../day23/crab_cups.rs"]
+#[path = "../2020/day23/crab_cups.rs"]
 mod day23;
-#[path = "../day24/hex_tiles.rs"]
+#[path = "../2020/day24/hex_tiles.rs"]
 mod day24;
-#[path = "../day25/combo_breaker.rs"]
+#[path = "../2020/day25/combo_breaker.rs"]
 mod day25;
 
 fn main() {
