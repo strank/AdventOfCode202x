@@ -14,11 +14,11 @@ fn write_generated_module(file: &mut fs::File, entries: Vec<String>, filemap: Ha
     writeln!(file, "// DO NOT EDIT!")?;
     writeln!(file, "")?;
     for year_entry in &entries {
-        writeln!(file, "// year {}", year_entry);
+        writeln!(file, "// year {}", year_entry)?;
         for path_buf in &filemap[year_entry] {
             let path_str = path_buf.to_str().unwrap().replace("\\", "/");
-            writeln!(file, "#[path = \"../{}\"]", path_str);
-            writeln!(file, "mod year{}{};", year_entry, path_str.get(5..10).unwrap());
+            writeln!(file, "#[path = \"../{}\"]", path_str)?;
+            writeln!(file, "mod year{}{};", year_entry, path_str.get(5..10).unwrap())?;
         }
     }
     writeln!(file, "")?;
@@ -34,11 +34,11 @@ fn write_generated_module(file: &mut fs::File, entries: Vec<String>, filemap: Ha
     writeln!(file, "    let mut days : [Option<fn() -> ()>; 26] = [None; 26];")?;
     writeln!(file, "    match year {{")?;
     for year_entry in &entries {
-        writeln!(file, "        {} => {{", year_entry);
+        writeln!(file, "        {} => {{", year_entry)?;
         for path_buf in &filemap[year_entry] {
             let path_str = path_buf.to_str().unwrap().replace("\\", "/");
             writeln!(file, "            days[{}] = Some(year{}{}::run);",
-                path_str.get(8..10).unwrap(), year_entry, path_str.get(5..10).unwrap());
+                path_str.get(8..10).unwrap(), year_entry, path_str.get(5..10).unwrap())?;
         }
         writeln!(file, "        }},")?;
     }
