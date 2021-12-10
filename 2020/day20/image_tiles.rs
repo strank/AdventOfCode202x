@@ -244,8 +244,8 @@ impl Tile<'_> {
     /// flip array, so that the indicated edge is reversed (and all other rows/cols)
     fn flip_along(&mut self, edge_dir: &EdgeDir) {
         let lane_iter = match edge_dir {
-            &EdgeDir::Top | &EdgeDir::Bottom => self.pixels.genrows_mut(),
-            &EdgeDir::Left | &EdgeDir::Right => self.pixels.gencolumns_mut(),
+            &EdgeDir::Top | &EdgeDir::Bottom => self.pixels.rows_mut(),
+            &EdgeDir::Left | &EdgeDir::Right => self.pixels.columns_mut(),
         };
         for mut lane in lane_iter {
             let lane_len = lane.len();
