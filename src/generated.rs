@@ -25,6 +25,10 @@ mod year2020day25;
 // year 2021
 #[path = "../2021/day05/hydrothermal_venture.rs"]
 mod year2021day05;
+#[path = "../2021/day06/lanternfish.rs"]
+mod year2021day06;
+#[path = "../2021/day07/whale_crabs.rs"]
+mod year2021day07;
 
 
 pub fn get_years() -> [usize; 2] {
@@ -51,6 +55,8 @@ pub fn get_days(year: usize) -> [Option<fn() -> ()>; 26] {
         },
         2021 => {
             days[05] = Some(year2021day05::run);
+            days[06] = Some(year2021day06::run);
+            days[07] = Some(year2021day07::run);
         },
         _ => {
         },

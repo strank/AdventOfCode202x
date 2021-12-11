@@ -37,7 +37,7 @@ fn abs_diff<U>(slf: U, other: U)  -> U
 
 
 fn calc_points_use_count(line_specs: &Vec<((usize, usize), (usize, usize))>, diag: bool) -> PosMap {
-    let mut points_used: PosMap = HashMap::new();
+    let mut points_used = PosMap::new();
     for ((a, b), (x, y)) in line_specs {
         if a != x && b != y {
             assert_eq!(abs_diff(*x, *a), abs_diff(*y, *b)); // as noted in the task
