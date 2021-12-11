@@ -30,8 +30,37 @@ fn find_median(positions: &Vec<usize>) -> usize {
 }
 
 
+fn find_average(positions: &Vec<usize>) -> f32 {
+    positions.iter().sum::<usize>() as f32 / positions.len() as f32
+}
+
+
 fn calculate_fuel_use(positions: &Vec<usize>, target_pos: usize) -> usize {
     positions.iter().map(|pos| abs_diff(*pos, target_pos)).sum()
+}
+
+
+fn calculate_fuel_use_triangular(positions: &Vec<usize>, target_pos: usize) -> usize {
+    positions.iter().map(|pos| {
+        let diff = abs_diff(*pos, target_pos);
+        diff * (diff + 1) / 2
+    }).sum()
+}
+
+
+/// didn't bother with proving that, but the best case should be at the average,
+/// or at least very close by
+fn find_best_fuel_use_triangular(positions: &Vec<usize>) -> (usize, usize) {
+    let mut target_pos = find_average(positions).round() as usize;
+    let mut best_case = calculate_fuel_use_triangular(positions, target_pos);
+    for new_target in [target_pos - 1, target_pos + 1] {
+        let new_sum = calculate_fuel_use_triangular(positions, new_target);
+        if new_sum < best_case {
+            best_case = new_sum;
+            target_pos = new_target;
+        }
+    }
+    (target_pos, best_case)
 }
 
 
@@ -51,4 +80,7 @@ pub fn run() -> () {
     let median_position = find_median(&positions);
     let fuel_use = calculate_fuel_use(&positions, median_position);
     println!("fuel use for position {}: {}", median_position, fuel_use);
+    // different distance measure in part 2: triangular number
+    let (best_position, fuel_use) = find_best_fuel_use_triangular(&positions);
+    println!("triangular fuel use for position {}: {}", best_position, fuel_use);
 }
