@@ -15,14 +15,14 @@ fn parse_expr(token_stream: &mut impl Iterator<Item = char>) -> Vec<char> {
             _ => polish.push(token),
         }
     }
-    return polish;
+    polish
 }
 
 /// parse with reversed operator precedence from normal:
 fn parse_expr_op_prec(
     token_stream: &mut Peekable<impl Iterator<Item = char>>
 ) -> Vec<char> {
-    return parse_expr_lhs(parse_primary(token_stream), token_stream);
+    parse_expr_lhs(parse_primary(token_stream), token_stream)
 }
 
 /// parse primary expr, either a number or a parenthesized expr
@@ -69,9 +69,10 @@ fn parse_expr_lhs(
         lhs.extend(rhs);
         //println!("lhs now: {:?}", lhs);
     }
-    return lhs;
+    lhs
 }
 
+#[allow(clippy::ptr_arg)]
 fn eval_expr(p_expr: &Vec<char>) -> u64 {
     let mut operand_stack: Vec<u64> = Vec::new();
     for &op in p_expr.iter().rev() {
@@ -89,9 +90,7 @@ fn eval_expr(p_expr: &Vec<char>) -> u64 {
             _ => operand_stack.push(op.to_digit(10).unwrap().into()),
         }
     }
-    let result = operand_stack.pop().unwrap();
-    //println!("{}", result);
-    return result;
+    operand_stack.pop().unwrap()
 }
 
 
@@ -108,30 +107,29 @@ const _TEST_INPUT: &str = "
 ";
 
 
-pub fn run() -> () {
-    let input: Vec<_> = include_str!("input")
+pub fn run() {
+    let input = include_str!("input")
             .trim()
-            .split("\n")
-            .collect();
+            .split('\n');
     //println!("input:\n{:?}\n", input);
-    let token_streams = input.iter()
-            .map(|&a| a.chars().filter(|&c| c != ' '));
+    let token_streams = input
+            .map(|a| a.chars().filter(|&c| c != ' '));
     // TODO: there should be a nicer way that doesn't create any intermediate Vec
     // but just passes through the initial chars in a different order...
     let mut parsed_exprs = Vec::new();
     let mut parsed_exprs2 = Vec::new();
     for ts in token_streams.into_iter() {
-        parsed_exprs.push(parse_expr(&mut ts.clone().into_iter()));
+        parsed_exprs.push(parse_expr(&mut ts.clone()));
         parsed_exprs2.push(parse_expr_op_prec(&mut ts.into_iter().peekable()));
 //        parsed_exprs2.push(parse_primary(&mut ts.into_iter().peekable()));
     }
     let evaluated_sum: u64 = parsed_exprs.iter()
-            .map(|pe| eval_expr(pe))
+            .map(eval_expr)
             .sum();
     println!("Sum of expressions, part 1: {}", evaluated_sum);
     //println!("Parsed: {:?}", parsed_exprs2);
     let evaluated_sum: u64 = parsed_exprs2.iter()
-            .map(|pe| eval_expr(pe))
+            .map(eval_expr)
             .sum();
     println!("Sum of expressions, part 2: {}", evaluated_sum);
 }

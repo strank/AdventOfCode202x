@@ -88,16 +88,15 @@ fn calc_score(deck: Deck) -> usize {
 
 
 fn cards_splitter(lines: &str) -> Deck {
-    lines.split('\n').skip(1).map(|a| usize::from_str_radix(a, 10).unwrap()).collect()
+    lines.split('\n').skip(1).map(|a| a.parse::<usize>().unwrap()).collect()
 }
 
 
-pub fn run() -> () {
-    let input: Vec<_> = include_str!("input")
+pub fn run() {
+    let input = include_str!("input")
             .trim()
-            .split("\n\n")
-            .collect();
-    let players: Vec<Deck> = input.into_iter()
+            .split("\n\n");
+    let players: Vec<Deck> = input
             .map(cards_splitter)
             .collect();
     println!("Input: {:?}", &players);

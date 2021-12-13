@@ -14,18 +14,17 @@ sqjhc mxmxvkd sbzzf (contains fish)
 
 fn food_splitter(line: &str) -> (Vec<&str>, Vec<&str>) {
     let mut ingrs_allergens = line.split(" (contains ");
-    let ingrs = ingrs_allergens.next().unwrap().split(" ").collect();
-    let allergens = ingrs_allergens.next().unwrap().trim_end_matches(")").split(", ").collect();
+    let ingrs = ingrs_allergens.next().unwrap().split(' ').collect();
+    let allergens = ingrs_allergens.next().unwrap().trim_end_matches(')').split(", ").collect();
     (ingrs, allergens)
 }
 
 
-pub fn run() -> () {
-    let input: Vec<_> = include_str!("input")
+pub fn run() {
+    let input = include_str!("input")
             .trim()
-            .split("\n")
-            .collect();
-    let foods: Vec<_> = input.into_iter()
+            .split('\n');
+    let foods: Vec<_> = input
             .map(food_splitter)
             .collect();
     //println!("Input: {:?}", &foods);
@@ -59,7 +58,7 @@ pub fn run() -> () {
                 .filter_map(|(&k, v)| {
                     if v.len() == 1 { Some(k) } else { None }
                 }).collect();
-        if allergens_found.len() == 0 {
+        if allergens_found.is_empty() {
             break;
         }
         for aller in allergens_found {

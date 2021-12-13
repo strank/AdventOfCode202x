@@ -54,9 +54,9 @@ pub fn get_days(year: usize) -> [Option<fn() -> ()>; 26] {
             days[25] = Some(year2020day25::run);
         },
         2021 => {
-            days[05] = Some(year2021day05::run);
-            days[06] = Some(year2021day06::run);
-            days[07] = Some(year2021day07::run);
+            days[5] = Some(year2021day05::run);
+            days[6] = Some(year2021day06::run);
+            days[7] = Some(year2021day07::run);
         },
         _ => {
         },

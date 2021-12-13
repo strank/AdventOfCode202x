@@ -13,10 +13,12 @@ type Cups = Vec<usize>;
 
 
 /// play 100 moves of the cups game and return the new cups order
+#[allow(clippy::needless_collect)]
 fn play_game(mut cups: Cups) -> Cups {
     let max_cup = *cups.iter().max().unwrap();
     let min_cup = *cups.iter().min().unwrap();
     for _ in 0..100 {
+        // need to collect here, as the items are later used to mutate cups again:
         let to_be_moved: Cups = cups.drain(1..4).collect();
         let mut target = cups[0] - 1;
         let target_index: usize;
@@ -74,7 +76,7 @@ impl Circle {
             let c = self.cw_neighbour[b];
             let mut target = self.current - 1;
             while [0, a, b, c].contains(&target) {
-                if target <= 0 {
+                if target == 0 {
                     target = self.max;
                 } else {
                     target -= 1;
@@ -96,7 +98,7 @@ fn cups_splitter(line: &str) -> Cups {
 }
 
 
-pub fn run() -> () {
+pub fn run() {
     let starting_cups: Cups = cups_splitter(INPUT);
     println!("Input: {:?}", &starting_cups);
     let part1_cups = play_game(starting_cups.clone());

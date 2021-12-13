@@ -44,7 +44,7 @@ impl<'a> ParseRun<'a> {
         let answer = self.eval_body(self.rules[rule], at_pos);
         let result = answer.clone();
         self.memo.insert((rule, at_pos), answer);
-        return result;
+        result
     }
 
     /// All rule bodies have the form: a [b] [ | c d ]
@@ -58,7 +58,7 @@ impl<'a> ParseRun<'a> {
             //println!("Checking option: {}", option);
             let mut current_positions = PosSet::new();
             current_positions.insert(at_pos);
-            for seq_elem in option.split(" ") {
+            for seq_elem in option.split(' ') {
                 //println!("Checking sequence element: {}", seq_elem);
                 if seq_elem.len() == 3 && seq_elem.starts_with('"') && seq_elem.ends_with('"') {
                     let to_match = seq_elem.chars().nth(1);
@@ -89,7 +89,7 @@ impl<'a> ParseRun<'a> {
                 // but to allow ambiguous rules, we will continue here
             }
         }
-        return matched;
+        matched
     }
 }
 
@@ -169,22 +169,22 @@ const PART2_MODIFICATION: &str = "
 
 fn rule_splitter(r: &str) -> (&str, &str) {
     // very verbose, next time try itertools::next_tuple
-    match &r.split(":").collect::<Vec<&str>>()[..] {
-        &[name, rule, ..] => (name, rule.trim()),
+    match r.split(':').collect::<Vec<&str>>()[..] {
+        [name, rule, ..] => (name, rule.trim()),
         _ => panic!("No rule found!"),
     }
 }
 
-pub fn run() -> () {
+pub fn run() {
     let input: Vec<_> = include_str!("input")
             .trim()
             .split("\n\n")
             .collect();
     let mut rules: HashMap<&str, &str> = input[0]
-            .split("\n")
+            .split('\n')
             .map(rule_splitter)
             .collect();
-    let messages: Vec<_> = input[1].split("\n").collect();
+    let messages: Vec<_> = input[1].split('\n').collect();
     //println!("rules:\n{:?}\nmessages:\n{:?}", rules, messages);
     // create a parser class that knows the rules and manages memoizing:
     // try applying rule 0 for each message and count successes:
@@ -193,7 +193,7 @@ pub fn run() -> () {
                 ParseRun::new(&rules, msg).parse("0")
             }).count();
     println!("Number of matches: {}", matched_messages_count);
-    for (rule, body) in PART2_MODIFICATION.trim().split("\n").map(rule_splitter) {
+    for (rule, body) in PART2_MODIFICATION.trim().split('\n').map(rule_splitter) {
         rules.insert(rule, body);
     }
     let matched_messages: Vec<&&str> = messages.iter()

@@ -198,20 +198,20 @@ impl Tile<'_> {
             pixels: Array::from_shape_vec(shape, // hard-coded size!
                 tile_string.chars()
                 .filter_map(|c| {
-                    if c == '#' { Some(1) } else {
-                        if " .".contains(c) { Some(0) } else { None } 
-                    }
+                    if c == '#' { Some(1) }
+                    else if " .".contains(c) { Some(0) }
+                    else { None }
                 }).collect()).unwrap(),
             id: tile_id,
         }
     }
 
     fn get_edge(&self, edge_dir: &EdgeDir) -> Edge {
-        match edge_dir {
-            &EdgeDir::Top => Edge(self.pixels.row(0).to_owned()),
-            &EdgeDir::Bottom => Edge(self.pixels.row(self.pixels.nrows() - 1).to_owned()),
-            &EdgeDir::Left => Edge(self.pixels.column(0).to_owned()),
-            &EdgeDir::Right => Edge(self.pixels.column(self.pixels.ncols() - 1).to_owned()),
+        match *edge_dir {
+            EdgeDir::Top => Edge(self.pixels.row(0).to_owned()),
+            EdgeDir::Bottom => Edge(self.pixels.row(self.pixels.nrows() - 1).to_owned()),
+            EdgeDir::Left => Edge(self.pixels.column(0).to_owned()),
+            EdgeDir::Right => Edge(self.pixels.column(self.pixels.ncols() - 1).to_owned()),
         }
     }
 
@@ -234,7 +234,7 @@ impl Tile<'_> {
 
     /// rotate until from_dir is to_dir
     fn rotate_from_to(&mut self, from_dir: &EdgeDir, to_dir: &EdgeDir) {
-        let mut cur_dir = from_dir.clone();
+        let mut cur_dir = *from_dir;
         while &cur_dir != to_dir {
             self.rotate_ccw();
             cur_dir = cur_dir.next_ccw();
@@ -259,8 +259,8 @@ impl Tile<'_> {
 
 fn tile_splitter(r: &'static str) -> (&str, Tile) {
     // very verbose, next time try itertools::next_tuple
-    match &r.split(":\n").collect::<Vec<&str>>()[..] {
-        &[name, tile_data, ..] => (&name[5..], Tile::from_str(tile_data, &name[5..])),
+    match r.split(":\n").collect::<Vec<&str>>()[..] {
+        [name, tile_data, ..] => (&name[5..], Tile::from_str(tile_data, &name[5..])),
         _ => panic!("No tile found!"),
     }
 }
@@ -357,7 +357,7 @@ fn reconstruct_image(
         let img_slice = s![row_index..row_index + 8, col_index..col_index + 8];
         azip!((ipix in &mut image.slice_mut(img_slice), &tpix in tile.pixels.slice(s![1..9, 1..9])) *ipix = tpix);
     }
-    return image;
+    image
 }
 
 
@@ -413,12 +413,11 @@ fn count_seamonster_hashes(image: ArrayView2<u8>, mut monster: Tile) -> usize {
 }
 
 
-pub fn run() -> () {
-    let input: Vec<_> = include_str!("input")
+pub fn run() {
+    let input = include_str!("input")
             .trim()
-            .split("\n\n")
-            .collect();
-    let tiles: HashMap<&str, Tile> = input.into_iter()
+            .split("\n\n");
+    let tiles: HashMap<&str, Tile> = input
             .map(tile_splitter)
             .collect();
     //println!("Input: {:?}", &tiles["3371"]);
@@ -426,7 +425,7 @@ pub fn run() -> () {
     for (&tile_name, tile) in &tiles {
         for (edge, edge_dir) in tile.get_edges() {
             edge_matches.entry(edge)
-                .or_insert(Vec::new()).push((tile_name, edge_dir));
+                .or_insert_with(Vec::new).push((tile_name, edge_dir));
         }
     }
     //println!("Edge_map {:?}", edge_matches);

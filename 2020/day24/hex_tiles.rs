@@ -77,7 +77,7 @@ wseweeenwnesenwwwswnew
 // --> answer 10 tiles black
 
 
-fn flip_tiles(lines: &Vec<&str>) -> HashSet<HexCoord> {
+fn flip_tiles(lines: &[&str]) -> HashSet<HexCoord> {
     let mut flipped_tiles = HashSet::new();
     for line in lines {
         //println!("Parsing line {}", line);
@@ -137,10 +137,10 @@ fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
     black_tiles
 }
 
-pub fn run() -> () {
+pub fn run() {
     let input: Vec<_> = include_str!("input")
             .trim()
-            .split("\n")
+            .split('\n')
             .collect();
     let black_tiles = flip_tiles(&input);
     println!("Num black tiles, part 1: {}", black_tiles.len());

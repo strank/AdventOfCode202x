@@ -19,7 +19,8 @@ fn abs_diff<U>(slf: U, other: U)  -> U
 }
 
 
-fn find_median(positions: &Vec<usize>) -> usize {
+/// expects an already sorted array slice!
+fn find_median(positions: &[usize]) -> usize {
     let len = positions.len();
     let mid = len / 2;
     if len % 2 == 0 {
@@ -30,17 +31,17 @@ fn find_median(positions: &Vec<usize>) -> usize {
 }
 
 
-fn find_average(positions: &Vec<usize>) -> f32 {
+fn find_average(positions: &[usize]) -> f32 {
     positions.iter().sum::<usize>() as f32 / positions.len() as f32
 }
 
 
-fn calculate_fuel_use(positions: &Vec<usize>, target_pos: usize) -> usize {
+fn calculate_fuel_use(positions: &[usize], target_pos: usize) -> usize {
     positions.iter().map(|pos| abs_diff(*pos, target_pos)).sum()
 }
 
 
-fn calculate_fuel_use_triangular(positions: &Vec<usize>, target_pos: usize) -> usize {
+fn calculate_fuel_use_triangular(positions: &[usize], target_pos: usize) -> usize {
     positions.iter().map(|pos| {
         let diff = abs_diff(*pos, target_pos);
         diff * (diff + 1) / 2
@@ -50,7 +51,7 @@ fn calculate_fuel_use_triangular(positions: &Vec<usize>, target_pos: usize) -> u
 
 /// didn't bother with proving that, but the best case should be at the average,
 /// or at least very close by
-fn find_best_fuel_use_triangular(positions: &Vec<usize>) -> (usize, usize) {
+fn find_best_fuel_use_triangular(positions: &[usize]) -> (usize, usize) {
     let mut target_pos = find_average(positions).round() as usize;
     let mut best_case = calculate_fuel_use_triangular(positions, target_pos);
     for new_target in [target_pos - 1, target_pos + 1] {
@@ -69,13 +70,13 @@ fn str_to_usize(a_str: &str) -> usize {
 }
 
 
-pub fn run() -> () {
+pub fn run() {
     let mut positions: Vec<_> = include_str!("input")
             .trim()
-            .split(",")
+            .split(',')
             .map(str_to_usize)
             .collect();
-    positions.sort();
+    positions.sort_unstable();
     //println!("positions:\n{:?}", positions);
     let median_position = find_median(&positions);
     let fuel_use = calculate_fuel_use(&positions, median_position);

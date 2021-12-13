@@ -4,7 +4,7 @@ use std::ops::Range;
 type Ticket = Vec<u32>;
 
 fn split_int(in_string: &str) -> Ticket {
-    in_string.split(",")
+    in_string.split(',')
         .map(|i| i.parse().unwrap())
         .collect()
 }
@@ -15,7 +15,7 @@ fn split_range_spec(in_string: &str) -> (&str, TwoRanges) {
     let pairs: Vec<&str> = in_string.split(": ").collect();
     let ranges: Vec<Vec<&str>> = pairs[1]
             .split(" or ")
-            .map(|a| a.split("-").collect())
+            .map(|a| a.split('-').collect())
             .collect();
     let mut ranges: Vec<Range<u32>> = ranges
             .iter()
@@ -27,20 +27,20 @@ fn split_range_spec(in_string: &str) -> (&str, TwoRanges) {
     (pairs[0], (ranges.remove(0), ranges.remove(0)))
 }
 
-pub fn run() -> () {
+pub fn run() {
     let input: Vec<&str> = include_str!("input")
             .split("\n\n")
             .map(|a| a.trim())
             .collect();
     let field_specs: HashMap<&str, TwoRanges> = input[0]
-            .split("\n")
+            .split('\n')
             .map(split_range_spec)
             .collect();
     let my_ticket = split_int(input[1]
-            .split("\n").last().unwrap().trim());
+            .split('\n').last().unwrap().trim());
     let nearby_tickets: Vec<Ticket> = input[2]
             .trim()
-            .split("\n")
+            .split('\n')
             .skip(1)
             .map(split_int)
             .collect();

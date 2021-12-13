@@ -49,13 +49,13 @@ fn transform_subject_number(subject: i32, loop_size: i32, modulo: i32) -> i32 {
 }
 
 
-pub fn run() -> () {
+pub fn run() {
     let input: Vec<_> = include_str!("input")
             .trim()
-            .split("\n")
+            .split('\n')
             .collect();
     let public_keys: Vec<_> = input.iter()
-            .map(|pk| i32::from_str_radix(pk, 10).unwrap())
+            .map(|pk| pk.parse::<i32>().unwrap())
             .collect();
     println!("Input keys: {:?}", &public_keys);
     // find discrete logarithm with base 7 in modular arithmetic to get the loop-sizes:

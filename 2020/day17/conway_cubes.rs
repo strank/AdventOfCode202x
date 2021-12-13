@@ -14,7 +14,7 @@ type Matrix4 = [[[[bool; MAX_W]; MAX_Z]; MAX_Y]; MAX_X];
 /// but starting at 1 and up to max-1 to leave out the edge
 /// so that no bounds check is necessary when adding the
 /// displacement of coords from (-1, 0, 1) * 3 (dropping the initial (0, 0, 0))
-fn step(matrix: &mut Matrix) -> () {
+fn step(matrix: &mut Matrix) {
     let mut changes = Vec::new();
     let coords = iproduct!(
             1..(MAX_X - 1), 1..(MAX_Y - 1), 1..(MAX_Z - 1));
@@ -25,7 +25,7 @@ fn step(matrix: &mut Matrix) -> () {
                     if matrix[(x as isize + i) as usize][(y as isize + j) as usize][(z as isize + k) as usize] { 1 } else { 0 })
                 .sum();
         //println!("{} {} {} -> {}", x, y, z, neighbor_sum);
-        if matrix[x][y][z] && (neighbor_sum < 2 || neighbor_sum > 3) {
+        if matrix[x][y][z] && !(2..=3).contains(&neighbor_sum) {
             changes.push((x, y, z));
         }
         if !matrix[x][y][z] && neighbor_sum == 3 {
@@ -39,7 +39,7 @@ fn step(matrix: &mut Matrix) -> () {
 }
 
 // code duplication for now, could do w dimension as Vec but that seems messy
-fn step4(matrix: &mut Matrix4) -> () {
+fn step4(matrix: &mut Matrix4) {
     let mut changes = Vec::new();
     let coords = iproduct!(
             1..(MAX_X - 1), 1..(MAX_Y - 1), 1..(MAX_Z - 1), 1..(MAX_W - 1));
@@ -50,7 +50,7 @@ fn step4(matrix: &mut Matrix4) -> () {
                     if matrix[(x as isize + i) as usize][(y as isize + j) as usize][(z as isize + k) as usize][(w as isize + l) as usize] { 1 } else { 0 })
                 .sum();
         //println!("{} {} {} -> {}", x, y, z, neighbor_sum);
-        if matrix[x][y][z][w] && (neighbor_sum < 2 || neighbor_sum > 3) {
+        if matrix[x][y][z][w] && !(2..=3).contains(&neighbor_sum) {
             changes.push((x, y, z, w));
         }
         if !matrix[x][y][z][w] && neighbor_sum == 3 {
@@ -63,9 +63,9 @@ fn step4(matrix: &mut Matrix4) -> () {
     }
 }
 
-pub fn run() -> () {
+pub fn run() {
     let input: Vec<&str> = include_str!("input")
-            .split("\n")
+            .split('\n')
             .map(|a| a.trim())
             .collect();
     println!("input:\n{:?}\n", input);

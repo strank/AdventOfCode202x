@@ -8,8 +8,10 @@ use num::{PrimInt, Unsigned};
 /// record all points that the line segments touch.
 /// first part: how many points get touched more than once?
 
+type Point = (usize, usize);
+type LineSpec = (Point, Point);
 /// hashmap that records how often a point is used by lines
-type PosMap = HashMap<(usize, usize), usize>;
+type PosMap = HashMap<Point, usize>;
 
 const _TEST_INPUT: &str = "
 0,9 -> 5,9
@@ -36,7 +38,7 @@ fn abs_diff<U>(slf: U, other: U)  -> U
 }
 
 
-fn calc_points_use_count(line_specs: &Vec<((usize, usize), (usize, usize))>, diag: bool) -> PosMap {
+fn calc_points_use_count(line_specs: &[LineSpec], diag: bool) -> PosMap {
     let mut points_used = PosMap::new();
     for ((a, b), (x, y)) in line_specs {
         if a != x && b != y {
@@ -75,10 +77,10 @@ fn str_to_usize(a_str: &str) -> usize {
 }
 
 
-fn line_splitter(line: &str) -> ((usize, usize), (usize, usize)) {
+fn line_splitter(line: &str) -> LineSpec {
     // very verbose, next time try itertools::next_tuple
-    match &line.trim().split(&[',', ' ', '-', '>'][..]).collect::<Vec<&str>>()[..] {
-        &[startx, starty, _, _, _, endx, endy, ..] => {
+    match line.trim().split(&[',', ' ', '-', '>'][..]).collect::<Vec<&str>>()[..] {
+        [startx, starty, _, _, _, endx, endy, ..] => {
             ((str_to_usize(startx), str_to_usize(starty)),
              (str_to_usize(endx), str_to_usize(endy)))
         },
@@ -86,10 +88,10 @@ fn line_splitter(line: &str) -> ((usize, usize), (usize, usize)) {
     }
 }
 
-pub fn run() -> () {
+pub fn run() {
     let line_specs: Vec<_> = include_str!("input")
             .trim()
-            .split("\n")
+            .split('\n')
             .map(line_splitter)
             .collect();
     //println!("lines:\n{:?}", line_specs);
