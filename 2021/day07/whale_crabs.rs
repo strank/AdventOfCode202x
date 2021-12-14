@@ -66,7 +66,7 @@ fn str_to_usize(a_str: &str) -> usize {
     a_str.parse::<usize>().unwrap()
 }
 
-pub fn run() {
+pub fn run() -> String {
     let mut positions: Vec<_> = include_str!("input")
         .trim()
         .split(',')
@@ -76,11 +76,10 @@ pub fn run() {
     //println!("positions:\n{:?}", positions);
     let median_position = find_median(&positions);
     let fuel_use = calculate_fuel_use(&positions, median_position);
-    println!("fuel use for position {}: {}", median_position, fuel_use);
     // different distance measure in part 2: triangular number
-    let (best_position, fuel_use) = find_best_fuel_use_triangular(&positions);
-    println!(
-        "triangular fuel use for position {}: {}",
-        best_position, fuel_use
-    );
+    let (best_position, fuel_use_t) = find_best_fuel_use_triangular(&positions);
+    format!(
+        "fuel use for position {}: {}\ntriangular fuel use for position {}: {}",
+        median_position, fuel_use, best_position, fuel_use_t
+    )
 }

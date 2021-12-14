@@ -45,16 +45,16 @@ fn transform_subject_number(subject: i32, loop_size: i32, modulo: i32) -> i32 {
     value as i32
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input: Vec<_> = include_str!("input").trim().split('\n').collect();
     let public_keys: Vec<_> = input.iter().map(|pk| pk.parse::<i32>().unwrap()).collect();
-    println!("Input keys: {:?}", &public_keys);
+    //println!("Input keys: {:?}", &public_keys);
     // find discrete logarithm with base 7 in modular arithmetic to get the loop-sizes:
     let loop_sizes: Vec<_> = public_keys
         .iter()
         .map(|&pk| find_discrete_log(pk, BASE, MODULO))
         .collect();
-    println!("Loop sizes: {:?}", &loop_sizes);
+    //println!("Loop sizes: {:?}", &loop_sizes);
     // check that it's true:
     for loop_s in &loop_sizes {
         println!(
@@ -64,8 +64,8 @@ pub fn run() {
         );
     }
     // calculate the encryption key
-    println!(
+    format!(
         "Encryption key, part 1: {}",
         transform_subject_number(public_keys[0], loop_sizes[1], MODULO)
-    );
+    )
 }

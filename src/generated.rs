@@ -3,34 +3,34 @@
 
 // year 2020
 #[path = "../2020/day16/tickets.rs"]
-mod year2020day16;
+pub mod year2020day16;
 #[path = "../2020/day17/conway_cubes.rs"]
-mod year2020day17;
+pub mod year2020day17;
 #[path = "../2020/day18/expr_parser.rs"]
-mod year2020day18;
+pub mod year2020day18;
 #[path = "../2020/day19/peg_parser.rs"]
-mod year2020day19;
+pub mod year2020day19;
 #[path = "../2020/day20/image_tiles.rs"]
-mod year2020day20;
+pub mod year2020day20;
 #[path = "../2020/day21/allergens.rs"]
-mod year2020day21;
+pub mod year2020day21;
 #[path = "../2020/day22/crab_combat.rs"]
-mod year2020day22;
+pub mod year2020day22;
 #[path = "../2020/day23/crab_cups.rs"]
-mod year2020day23;
+pub mod year2020day23;
 #[path = "../2020/day24/hex_tiles.rs"]
-mod year2020day24;
+pub mod year2020day24;
 #[path = "../2020/day25/combo_breaker.rs"]
-mod year2020day25;
+pub mod year2020day25;
 // year 2021
 #[path = "../2021/day05/hydrothermal_venture.rs"]
-mod year2021day05;
+pub mod year2021day05;
 #[path = "../2021/day06/lanternfish.rs"]
-mod year2021day06;
+pub mod year2021day06;
 #[path = "../2021/day07/whale_crabs.rs"]
-mod year2021day07;
+pub mod year2021day07;
 #[path = "../2021/day08/seven_segment_search.rs"]
-mod year2021day08;
+pub mod year2021day08;
 
 pub fn get_years() -> [usize; 2] {
     [2020, 2021]
@@ -38,8 +38,8 @@ pub fn get_years() -> [usize; 2] {
 
 /// Return an array of 26 run functions
 /// (26 rather than 25 for clean 1-based indexing)
-pub fn get_days(year: usize) -> [Option<fn() -> ()>; 26] {
-    let mut days: [Option<fn() -> ()>; 26] = [None; 26];
+pub fn get_days(year: usize) -> [Option<fn() -> String>; 26] {
+    let mut days: [Option<fn() -> String>; 26] = [None; 26];
     match year {
         2020 => {
             days[16] = Some(year2020day16::run);

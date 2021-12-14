@@ -102,7 +102,7 @@ const _TEST_INPUT: &str = "
 (2 * (2 * 3)) + 4
 ";
 
-pub fn run() {
+pub fn run() -> String {
     let input = include_str!("input").trim().split('\n');
     //println!("input:\n{:?}\n", input);
     let token_streams = input.map(|a| a.chars().filter(|&c| c != ' '));
@@ -120,4 +120,5 @@ pub fn run() {
     //println!("Parsed: {:?}", parsed_exprs2);
     let evaluated_sum: u64 = parsed_exprs2.iter().map(eval_expr).sum();
     println!("Sum of expressions, part 2: {}", evaluated_sum);
+    format!("TODO")
 }

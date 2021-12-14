@@ -124,22 +124,19 @@ fn cards_splitter(lines: &str) -> Deck {
         .collect()
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input = include_str!("input").trim().split("\n\n");
     let players: Vec<Deck> = input.map(cards_splitter).collect();
-    println!("Input: {:?}", &players);
-    let (winner, winning_deck) = play_combat(players.clone());
-    println!(
-        "Part one Winner {} with deck: {:?}",
-        winner + 1,
-        &winning_deck
-    );
-    println!("Winner scores: {:?}", calc_score(winning_deck));
-    let (recursive_winner, winning_deck) = play_recursive_combat(players);
-    println!(
-        "Part two Winner {} with deck: {:?}",
+    //println!("Input: {:?}", &players);
+    let (winner_1, winning_deck_1) = play_combat(players.clone());
+    println!("Winning deck part 1: {:?}", &winning_deck_1);
+    let (recursive_winner, winning_deck_2) = play_recursive_combat(players);
+    println!("Winning deck part 2: {:?}", &winning_deck_2);
+    format!(
+        "Part one Winner {} scores: {:?}\nPart two Winner {} scores: {:?}",
+        winner_1 + 1,
+        calc_score(winning_deck_1),
         recursive_winner + 1,
-        &winning_deck
-    );
-    println!("Winner scores: {:?}", calc_score(winning_deck));
+        calc_score(winning_deck_2)
+    )
 }

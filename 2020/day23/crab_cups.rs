@@ -98,11 +98,10 @@ fn cups_splitter(line: &str) -> Cups {
         .collect()
 }
 
-pub fn run() {
+pub fn run() -> String {
     let starting_cups: Cups = cups_splitter(INPUT);
-    println!("Input: {:?}", &starting_cups);
+    //println!("Input: {:?}", &starting_cups);
     let part1_cups = play_game(starting_cups.clone());
-    println!("Part one final cups: {:?}", &part1_cups);
     // part 2: extend cups to 1 million, do 10 million moves
     // -> need a specialized structure, a linked-list in an array
     let mut circle = Circle::new(starting_cups, 1_000_000);
@@ -119,10 +118,11 @@ pub fn run() {
     );
     let a = circle.cw_neighbour[1];
     let b = circle.cw_neighbour[a];
-    println!(
-        "Product of 1-neighbours: {} * {} = {}",
+    format!(
+        "Part one final cups: {:?}\nProduct of 1-neighbours: {} * {} = {}",
+        &part1_cups,
         a,
         b,
         a as u64 * b as u64
-    );
+    )
 }

@@ -25,17 +25,19 @@ fn str_to_usize(a_str: &str) -> usize {
     a_str.parse::<usize>().unwrap()
 }
 
-pub fn run() {
+pub fn run() -> String {
     let timers: Vec<_> = include_str!("input")
         .trim()
         .split(',')
         .map(str_to_usize)
         .collect();
     //println!("timers:\n{:?}", timers);
-    let sim_steps: usize = 80;
-    let num_fish = count_after_sim_steps(&timers, sim_steps);
-    println!("number of fish after {} days: {}", sim_steps, num_fish);
-    let sim_steps: usize = 256;
-    let num_fish = count_after_sim_steps(&timers, sim_steps);
-    println!("number of fish after {} days: {}", sim_steps, num_fish);
+    let sim_steps_1: usize = 80;
+    let num_fish_1 = count_after_sim_steps(&timers, sim_steps_1);
+    let sim_steps_2: usize = 256;
+    let num_fish_2 = count_after_sim_steps(&timers, sim_steps_2);
+    format!(
+        "number of fish after {} days: {}\nnumber of fish after {} days: {}",
+        sim_steps_1, num_fish_1, sim_steps_2, num_fish_2
+    )
 }

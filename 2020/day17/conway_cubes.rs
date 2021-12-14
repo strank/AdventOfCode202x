@@ -88,7 +88,7 @@ fn step4(matrix: &mut Matrix4) {
     }
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input: Vec<&str> = include_str!("input")
         .split('\n')
         .map(|a| a.trim())
@@ -134,6 +134,7 @@ pub fn run() {
         .map(|&b| if b { 1 } else { 0 })
         .sum();
     println!("Active count 4D {}", active_count);
+    format!("TODO")
 
     // Better Ideas:
 

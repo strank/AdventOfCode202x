@@ -22,7 +22,7 @@ fn write_generated_module(
             writeln!(file, "#[path = \"../{}\"]", path_str)?;
             writeln!(
                 file,
-                "mod year{}{};",
+                "pub mod year{}{};",
                 year_entry,
                 path_str.get(5..10).unwrap()
             )?;
@@ -37,11 +37,11 @@ fn write_generated_module(
     writeln!(file, "/// (26 rather than 25 for clean 1-based indexing)")?;
     writeln!(
         file,
-        "pub fn get_days(year: usize) -> [Option<fn() -> ()>; 26] {{"
+        "pub fn get_days(year: usize) -> [Option<fn() -> String>; 26] {{"
     )?;
     writeln!(
         file,
-        "    let mut days: [Option<fn() -> ()>; 26] = [None; 26];"
+        "    let mut days: [Option<fn() -> String>; 26] = [None; 26];"
     )?;
     writeln!(file, "    match year {{")?;
     for year_entry in &entries {

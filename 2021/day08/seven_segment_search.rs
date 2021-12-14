@@ -1,7 +1,12 @@
-use std::collections::{BTreeSet, HashMap};
+//! https://adventofcode.com/2021/day/8
+//! identify seven-segment display numbers based on randomly shuffled segment labels
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2021day08::run;
+//! assert!(run().contains("num of unique len outputs: 375\nsum of outputs: 1019355"));
+//! ```
 
-/// https://adventofcode.com/2021/day/8
-/// identify seven-segment display numbers based on randomly shuffled segment labels
+use std::collections::{BTreeSet, HashMap};
 
 /// an entry has the 10 unique segment patterns observed, and 4 specific output values seen:
 type SegmentPattern = BTreeSet<char>;
@@ -9,6 +14,7 @@ type DisplayEntry = ([SegmentPattern; 10], [SegmentPattern; 4]);
 /// need to find a mapping from pattern to digit:
 type DigitMapping = HashMap<SegmentPattern, usize>;
 
+const INPUT: &str = include_str!("input");
 const _TEST_INPUT: &str = "
 be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
 edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
@@ -146,12 +152,14 @@ fn str_to_display_entry(a_str: &str) -> DisplayEntry {
     )
 }
 
-pub fn run() {
-    let input = include_str!("input").trim().split('\n');
+pub fn run() -> String {
+    let input = INPUT.trim().split('\n');
     let displays: Vec<DisplayEntry> = input.map(str_to_display_entry).collect();
     //println!("displays:\n{:?}", displays);
     let num_of_unique_outputs = count_unique_len_outputs(&displays);
-    println!("num of unique len outputs: {}", num_of_unique_outputs);
     let sum_of_outputs = sum_outputs(&displays);
-    println!("sum of outputs: {}", sum_of_outputs);
+    format!(
+        "num of unique len outputs: {}\nsum of outputs: {}",
+        num_of_unique_outputs, sum_of_outputs
+    )
 }

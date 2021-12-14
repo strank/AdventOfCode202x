@@ -24,7 +24,7 @@ fn food_splitter(line: &str) -> (Vec<&str>, Vec<&str>) {
     (ingrs, allergens)
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input = include_str!("input").trim().split('\n');
     let foods: Vec<_> = input.map(food_splitter).collect();
     //println!("Input: {:?}", &foods);
@@ -96,4 +96,5 @@ pub fn run() {
         .map(|&&a| allergen_translations[a])
         .collect();
     println!("{}", translations.join(","));
+    format!("TODO")
 }

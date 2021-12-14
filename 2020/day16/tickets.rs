@@ -27,7 +27,7 @@ fn split_range_spec(in_string: &str) -> (&str, TwoRanges) {
     (pairs[0], (ranges.remove(0), ranges.remove(0)))
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input: Vec<&str> = include_str!("input")
         .split("\n\n")
         .map(|a| a.trim())
@@ -95,4 +95,5 @@ pub fn run() {
         }
     }
     println!("Product of departures: {}", departures);
+    format!("TODO")
 }

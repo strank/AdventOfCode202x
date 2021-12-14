@@ -96,22 +96,18 @@ fn line_splitter(line: &str) -> LineSpec {
     }
 }
 
-pub fn run() {
+pub fn run() -> String {
     let line_specs: Vec<_> = include_str!("input")
         .trim()
         .split('\n')
         .map(line_splitter)
         .collect();
     //println!("lines:\n{:?}", line_specs);
-    let points_used = calc_points_use_count(&line_specs, false);
-    println!(
-        "Number of doubly used points: {}",
-        get_doubly_used_points(&points_used)
-    );
-    let points_used = calc_points_use_count(&line_specs, true);
-    //println!("points used:\n{:?}", points_used);
-    println!(
-        "Number of doubly used points: {}",
-        get_doubly_used_points(&points_used)
-    );
+    let points_used_1 = calc_points_use_count(&line_specs, false);
+    let points_used_2 = calc_points_use_count(&line_specs, true);
+    format!(
+        "Number of doubly used points, straight-only: {}\nNumber of doubly used points: {}",
+        get_doubly_used_points(&points_used_1),
+        get_doubly_used_points(&points_used_2)
+    )
 }

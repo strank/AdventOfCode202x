@@ -179,7 +179,7 @@ fn rule_splitter(r: &str) -> (&str, &str) {
     }
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input: Vec<_> = include_str!("input").trim().split("\n\n").collect();
     let mut rules: HashMap<&str, &str> = input[0].split('\n').map(rule_splitter).collect();
     let messages: Vec<_> = input[1].split('\n').collect();
@@ -200,4 +200,5 @@ pub fn run() {
         .collect();
     println!("Part 2, matches: {:?}", matched_messages);
     println!("Part 2, Number of matches: {}", matched_messages.len());
+    format!("TODO")
 }

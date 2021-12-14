@@ -426,7 +426,7 @@ fn count_seamonster_hashes(image: ArrayView2<u8>, mut monster: Tile) -> usize {
     panic!("No monsters found in any orientation!");
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input = include_str!("input").trim().split("\n\n");
     let tiles: HashMap<&str, Tile> = input.map(tile_splitter).collect();
     //println!("Input: {:?}", &tiles["3371"]);
@@ -475,4 +475,5 @@ pub fn run() {
         "NOT PART OF SEA MONSTERS sum: {}",
         num_hashes_not_seamonster
     );
+    format!("TODO")
 }

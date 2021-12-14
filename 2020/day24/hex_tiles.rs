@@ -5,13 +5,13 @@
 //! every tile has an (x, y, z) coordinate where x+y+z=0
 //! (so one coordinate is redundant)
 //!
-//!        -z
-//!     +y  |  +x
-//!       \ ^ /
-//!        | |
-//!       / v \
-//!     -x  |  -y
-//!        +z
+//!    -z
+//! +y  |  +x
+//!   \ ^ /
+//!    | |
+//!   / v \
+//! -x  |  -y
+//!    +z
 //!
 //! so going east, for example, increases x, but decreases y (z stays the same)
 
@@ -132,10 +132,14 @@ fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
     black_tiles
 }
 
-pub fn run() {
+pub fn run() -> String {
     let input: Vec<_> = include_str!("input").trim().split('\n').collect();
-    let black_tiles = flip_tiles(&input);
-    println!("Num black tiles, part 1: {}", black_tiles.len());
-    let black_tiles = game_of_life(black_tiles);
-    println!("Num black tiles, part 2: {}", black_tiles.len());
+    let black_tiles_1 = flip_tiles(&input);
+    let black_tiles_1_len = black_tiles_1.len();
+    let black_tiles_2 = game_of_life(black_tiles_1);
+    format!(
+        "Num black tiles, part 1: {}\nNum black tiles, part 2: {}",
+        black_tiles_1_len,
+        black_tiles_2.len()
+    )
 }
