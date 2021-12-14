@@ -1,3 +1,6 @@
+#![warn(clippy::all)]
+
+/// all references to individual puzzles are auto-generated:
 mod generated;
 
 /// Two arguments possible: day year
