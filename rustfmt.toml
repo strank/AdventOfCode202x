@@ -1,0 +1,4 @@
+newline_style = "Unix"
+# nightly channel settings I might enable once stable:
+#overflow_delimited_expr = true
+#version = "Two"
