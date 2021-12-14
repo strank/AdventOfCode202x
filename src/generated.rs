@@ -29,6 +29,8 @@ mod year2021day05;
 mod year2021day06;
 #[path = "../2021/day07/whale_crabs.rs"]
 mod year2021day07;
+#[path = "../2021/day08/seven_segment_search.rs"]
+mod year2021day08;
 
 
 pub fn get_years() -> [usize; 2] {
@@ -57,6 +59,7 @@ pub fn get_days(year: usize) -> [Option<fn() -> ()>; 26] {
             days[5] = Some(year2021day05::run);
             days[6] = Some(year2021day06::run);
             days[7] = Some(year2021day07::run);
+            days[8] = Some(year2021day08::run);
         },
         _ => {
         },
