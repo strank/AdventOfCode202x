@@ -32,16 +32,14 @@ mod year2021day07;
 #[path = "../2021/day08/seven_segment_search.rs"]
 mod year2021day08;
 
-
 pub fn get_years() -> [usize; 2] {
     [2020, 2021]
 }
 
-
 /// Return an array of 26 run functions
 /// (26 rather than 25 for clean 1-based indexing)
 pub fn get_days(year: usize) -> [Option<fn() -> ()>; 26] {
-    let mut days : [Option<fn() -> ()>; 26] = [None; 26];
+    let mut days: [Option<fn() -> ()>; 26] = [None; 26];
     match year {
         2020 => {
             days[16] = Some(year2020day16::run);
@@ -54,15 +52,14 @@ pub fn get_days(year: usize) -> [Option<fn() -> ()>; 26] {
             days[23] = Some(year2020day23::run);
             days[24] = Some(year2020day24::run);
             days[25] = Some(year2020day25::run);
-        },
+        }
         2021 => {
             days[5] = Some(year2021day05::run);
             days[6] = Some(year2021day06::run);
             days[7] = Some(year2021day07::run);
             days[8] = Some(year2021day08::run);
-        },
-        _ => {
-        },
+        }
+        _ => {}
     }
     days
 }

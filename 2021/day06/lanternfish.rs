@@ -4,10 +4,8 @@
 
 const _TEST_INPUT: &str = "3,4,3,1,2"; // --> answer 5934 after 80 days, 26 after 18 days
 
-
 /// vec that records how many fish with a certain timer are present
 type FishRegister = [usize; 9];
-
 
 fn count_after_sim_steps(timers: &[usize], sim_steps: usize) -> usize {
     let mut simulation: FishRegister = [0; 9];
@@ -27,13 +25,12 @@ fn str_to_usize(a_str: &str) -> usize {
     a_str.parse::<usize>().unwrap()
 }
 
-
 pub fn run() {
     let timers: Vec<_> = include_str!("input")
-            .trim()
-            .split(',')
-            .map(str_to_usize)
-            .collect();
+        .trim()
+        .split(',')
+        .map(str_to_usize)
+        .collect();
     //println!("timers:\n{:?}", timers);
     let sim_steps: usize = 80;
     let num_fish = count_after_sim_steps(&timers, sim_steps);

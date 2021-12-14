@@ -23,14 +23,17 @@ impl<'a> ParseRun<'a> {
         ParseRun {
             rules,
             msg,
-            memo : HashMap::new(),
+            memo: HashMap::new(),
         }
     }
 
     /// return true if the rule matches the whole msg:
     fn parse(&mut self, rule: &'a str) -> bool {
         let target_len = self.msg.len();
-        return self.apply_rule(rule, 0).iter().any(|&pos| target_len == pos);
+        return self
+            .apply_rule(rule, 0)
+            .iter()
+            .any(|&pos| target_len == pos);
     }
 
     /// return a set of possible new positions after applying the rule
@@ -63,27 +66,29 @@ impl<'a> ParseRun<'a> {
                 if seq_elem.len() == 3 && seq_elem.starts_with('"') && seq_elem.ends_with('"') {
                     let to_match = seq_elem.chars().nth(1);
                     // advance all positions that match:
-                    current_positions = current_positions.iter()
-                            .filter(|&&pos| {
-                                to_match == self.msg.chars().nth(pos)
-                            }).map(|&pos| pos + 1)
-                            .collect(); 
+                    current_positions = current_positions
+                        .iter()
+                        .filter(|&&pos| to_match == self.msg.chars().nth(pos))
+                        .map(|&pos| pos + 1)
+                        .collect();
                     if current_positions.is_empty() {
                         break; // sequence failed
                     }
-                } else { // it is another rule:
-                    current_positions = current_positions.iter()
-                            .map(|&pos| self.apply_rule(seq_elem, pos))
-                            .fold(PosSet::new(), |hs, next_hs| {
-                                hs.union(&next_hs).cloned().collect()
-                            });
+                } else {
+                    // it is another rule:
+                    current_positions = current_positions
+                        .iter()
+                        .map(|&pos| self.apply_rule(seq_elem, pos))
+                        .fold(PosSet::new(), |hs, next_hs| {
+                            hs.union(&next_hs).cloned().collect()
+                        });
                     if current_positions.is_empty() {
                         break; // sequence failed
                     }
                 }
             }
-            if ! current_positions.is_empty() {
-                assert!(! current_positions.contains(&at_pos));
+            if !current_positions.is_empty() {
+                assert!(!current_positions.contains(&at_pos));
                 matched = matched.union(&current_positions).cloned().collect();
                 // a true PEG parser would return here on the first option that already succeeded,
                 // but to allow ambiguous rules, we will continue here
@@ -92,7 +97,6 @@ impl<'a> ParseRun<'a> {
         matched
     }
 }
-
 
 const _TEST_INPUT: &str = "
 0: 4 1 5
@@ -176,30 +180,24 @@ fn rule_splitter(r: &str) -> (&str, &str) {
 }
 
 pub fn run() {
-    let input: Vec<_> = include_str!("input")
-            .trim()
-            .split("\n\n")
-            .collect();
-    let mut rules: HashMap<&str, &str> = input[0]
-            .split('\n')
-            .map(rule_splitter)
-            .collect();
+    let input: Vec<_> = include_str!("input").trim().split("\n\n").collect();
+    let mut rules: HashMap<&str, &str> = input[0].split('\n').map(rule_splitter).collect();
     let messages: Vec<_> = input[1].split('\n').collect();
     //println!("rules:\n{:?}\nmessages:\n{:?}", rules, messages);
     // create a parser class that knows the rules and manages memoizing:
     // try applying rule 0 for each message and count successes:
-    let matched_messages_count = messages.iter()
-            .filter(|&&msg| {
-                ParseRun::new(&rules, msg).parse("0")
-            }).count();
+    let matched_messages_count = messages
+        .iter()
+        .filter(|&&msg| ParseRun::new(&rules, msg).parse("0"))
+        .count();
     println!("Number of matches: {}", matched_messages_count);
     for (rule, body) in PART2_MODIFICATION.trim().split('\n').map(rule_splitter) {
         rules.insert(rule, body);
     }
-    let matched_messages: Vec<&&str> = messages.iter()
-            .filter(|&&msg| {
-                ParseRun::new(&rules, msg).parse("0")
-            }).collect();
+    let matched_messages: Vec<&&str> = messages
+        .iter()
+        .filter(|&&msg| ParseRun::new(&rules, msg).parse("0"))
+        .collect();
     println!("Part 2, matches: {:?}", matched_messages);
     println!("Part 2, Number of matches: {}", matched_messages.len());
 }

@@ -1,23 +1,22 @@
 //! https://adventofcode.com/2020/day/24
 //! Hexagon tiles: identify from walking instructions -> choose good coordinate system
-//! 
+//!
 //! cube coordinates: tiles correspond to 3d cubes projected onto a plane,
 //! every tile has an (x, y, z) coordinate where x+y+z=0
 //! (so one coordinate is redundant)
-//! 
+//!
 //!        -z
 //!     +y  |  +x
 //!       \ ^ /
 //!        | |
-//!       / v \ 
+//!       / v \
 //!     -x  |  -y
 //!        +z
-//! 
+//!
 //! so going east, for example, increases x, but decreases y (z stays the same)
 
-use std::collections::{HashSet, HashMap};
 use phf::phf_map;
-
+use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct HexCoord {
@@ -39,7 +38,6 @@ impl HexCoord {
     }
 }
 
-
 const ORIGIN: HexCoord = HexCoord { x: 0, y: 0 };
 
 static DIRS: phf::Map<&str, HexCoord> = phf_map! {
@@ -50,7 +48,6 @@ static DIRS: phf::Map<&str, HexCoord> = phf_map! {
     "ne" => HexCoord { x:  1, y:  0 },
     "sw" => HexCoord { x: -1, y:  0 },
 };
-
 
 const _TEST_INPUT: &str = "
 sesenwnenenewseeswwswswwnenewsewsw
@@ -75,7 +72,6 @@ neswnwewnwnwseenwseesewsenwsweewe
 wseweeenwnesenwwwswnew
 ";
 // --> answer 10 tiles black
-
 
 fn flip_tiles(lines: &[&str]) -> HashSet<HexCoord> {
     let mut flipped_tiles = HashSet::new();
@@ -102,7 +98,6 @@ fn flip_tiles(lines: &[&str]) -> HashSet<HexCoord> {
     flipped_tiles
 }
 
-
 fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
     for day in 1..=100 {
         let mut tiles_to_flip: HashSet<HexCoord> = HashSet::new();
@@ -114,7 +109,7 @@ fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
                     black_count += 1;
                 } else {
                     *whites_black_neighbour_count.entry(neighbour).or_insert(0) += 1
-                } 
+                }
             }
             if black_count == 0 || black_count > 2 {
                 tiles_to_flip.insert(*tile);
@@ -123,7 +118,7 @@ fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
         for (tile, count) in whites_black_neighbour_count {
             if count == 2 {
                 tiles_to_flip.insert(tile);
-            }            
+            }
         }
         for tile in tiles_to_flip {
             if !black_tiles.remove(&tile) {
@@ -138,10 +133,7 @@ fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
 }
 
 pub fn run() {
-    let input: Vec<_> = include_str!("input")
-            .trim()
-            .split('\n')
-            .collect();
+    let input: Vec<_> = include_str!("input").trim().split('\n').collect();
     let black_tiles = flip_tiles(&input);
     println!("Num black tiles, part 1: {}", black_tiles.len());
     let black_tiles = game_of_life(black_tiles);

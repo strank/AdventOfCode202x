@@ -1,16 +1,15 @@
 //! https://adventofcode.com/2020/day/23
 //! Cups game with a crab
-//! 
+//!
 //! part 1 implemented directly by holding the cup numbers in a vec
 //! part 2 needed a more efficient representation: neighbour links
 
 const _TEST_INPUT: &str = "389125467";
 // --> answer after 100 moves: (1) 67384529
 
-const INPUT : &str = "614752839";
+const INPUT: &str = "614752839";
 
 type Cups = Vec<usize>;
-
 
 /// play 100 moves of the cups game and return the new cups order
 #[allow(clippy::needless_collect)]
@@ -32,12 +31,14 @@ fn play_game(mut cups: Cups) -> Cups {
             }
             target -= 1;
         }
-        to_be_moved.into_iter().rev().for_each(|ele| cups.insert(target_index + 1, ele));
+        to_be_moved
+            .into_iter()
+            .rev()
+            .for_each(|ele| cups.insert(target_index + 1, ele));
         cups.rotate_left(1);
     }
     cups
 }
-
 
 /// struct tracks the clockwise neighbour of every number on a circle
 /// minimum number is always 1 and the circle is filled up with nums up to max
@@ -47,7 +48,6 @@ struct Circle {
     current: usize,
     max: usize,
 }
-
 
 impl Circle {
     fn new(starting_cups: Cups, max: usize) -> Self {
@@ -82,9 +82,9 @@ impl Circle {
                     target -= 1;
                 }
             }
-            // cut a,b,c out from circle 
+            // cut a,b,c out from circle
             self.cw_neighbour[self.current] = self.cw_neighbour[c];
-            // insert a,b,c clockwise from target: 
+            // insert a,b,c clockwise from target:
             self.cw_neighbour[c] = self.cw_neighbour[target];
             self.cw_neighbour[target] = a;
             self.current = self.cw_neighbour[self.current];
@@ -92,11 +92,11 @@ impl Circle {
     }
 }
 
-
 fn cups_splitter(line: &str) -> Cups {
-    line.chars().map(|c| c.to_digit(10).unwrap() as usize).collect()
+    line.chars()
+        .map(|c| c.to_digit(10).unwrap() as usize)
+        .collect()
 }
-
 
 pub fn run() {
     let starting_cups: Cups = cups_splitter(INPUT);
@@ -106,12 +106,23 @@ pub fn run() {
     // part 2: extend cups to 1 million, do 10 million moves
     // -> need a specialized structure, a linked-list in an array
     let mut circle = Circle::new(starting_cups, 1_000_000);
-    println!("Circle first 12: {:?} last 5: {:?}", &circle.cw_neighbour[..12],
-            &circle.cw_neighbour[circle.max - 4..]);
+    println!(
+        "Circle first 12: {:?} last 5: {:?}",
+        &circle.cw_neighbour[..12],
+        &circle.cw_neighbour[circle.max - 4..]
+    );
     circle.play_game();
-    println!("Circle first 12: {:?} last 5: {:?}", &circle.cw_neighbour[..12],
-            &circle.cw_neighbour[circle.max - 4..]);
+    println!(
+        "Circle first 12: {:?} last 5: {:?}",
+        &circle.cw_neighbour[..12],
+        &circle.cw_neighbour[circle.max - 4..]
+    );
     let a = circle.cw_neighbour[1];
     let b = circle.cw_neighbour[a];
-    println!("Product of 1-neighbours: {} * {} = {}", a, b, a as u64 * b as u64);
+    println!(
+        "Product of 1-neighbours: {} * {} = {}",
+        a,
+        b,
+        a as u64 * b as u64
+    );
 }

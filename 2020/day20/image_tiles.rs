@@ -1,5 +1,8 @@
-use std::{collections::HashMap, hash::{Hash, Hasher}};
-use ndarray::{Zip, prelude::*};
+use ndarray::{prelude::*, Zip};
+use std::{
+    collections::HashMap,
+    hash::{Hash, Hasher},
+};
 
 /// https://adventofcode.com/2020/day/20
 /// Match image tiles based on their borders
@@ -119,10 +122,10 @@ Tile 3079:
 ..#.......
 ..#.###...
 "; // --> answer
-// 1951    2311    3079
-// 2729    1427    2473
-// 2971    1489    1171
-// multiply the IDs of the four corner tiles: 1951 * 3079 * 2971 * 1171 = 20899048083289.
+   // 1951    2311    3079
+   // 2729    1427    2473
+   // 2971    1489    1171
+   // multiply the IDs of the four corner tiles: 1951 * 3079 * 2971 * 1171 = 20899048083289.
 
 // PART 1 solved without representing the tiles, just focusing on edges:
 
@@ -187,21 +190,29 @@ impl EdgeDir {
     }
 }
 
-
-impl Tile<'_> {    
+impl Tile<'_> {
     fn from_str(tile_string: &str, tile_id: &'static str) -> Self {
         Tile::from_str_shape(tile_string, tile_id, (10, 10))
     }
 
     fn from_str_shape(tile_string: &str, tile_id: &'static str, shape: (usize, usize)) -> Self {
-            Tile {
-            pixels: Array::from_shape_vec(shape, // hard-coded size!
-                tile_string.chars()
-                .filter_map(|c| {
-                    if c == '#' { Some(1) }
-                    else if " .".contains(c) { Some(0) }
-                    else { None }
-                }).collect()).unwrap(),
+        Tile {
+            pixels: Array::from_shape_vec(
+                shape, // hard-coded size!
+                tile_string
+                    .chars()
+                    .filter_map(|c| {
+                        if c == '#' {
+                            Some(1)
+                        } else if " .".contains(c) {
+                            Some(0)
+                        } else {
+                            None
+                        }
+                    })
+                    .collect(),
+            )
+            .unwrap(),
             id: tile_id,
         }
     }
@@ -222,7 +233,7 @@ impl Tile<'_> {
             .collect()
     }
 
-    /// rotate array counterclockwise, i.e. the final column becomes the first row 
+    /// rotate array counterclockwise, i.e. the final column becomes the first row
     fn rotate_ccw(&mut self) {
         let mut pix_vec = Vec::new();
         for col_index in (0..self.pixels.ncols()).rev() {
@@ -240,7 +251,7 @@ impl Tile<'_> {
             cur_dir = cur_dir.next_ccw();
         }
     }
- 
+
     /// flip array, so that the indicated edge is reversed (and all other rows/cols)
     fn flip_along(&mut self, edge_dir: &EdgeDir) {
         let lane_iter = match edge_dir {
@@ -256,7 +267,6 @@ impl Tile<'_> {
     }
 }
 
-
 fn tile_splitter(r: &'static str) -> (&str, Tile) {
     // very verbose, next time try itertools::next_tuple
     match r.split(":\n").collect::<Vec<&str>>()[..] {
@@ -264,7 +274,6 @@ fn tile_splitter(r: &'static str) -> (&str, Tile) {
         _ => panic!("No tile found!"),
     }
 }
-
 
 /// reconstruct image by starting from a corner and filling a matrix:
 fn reconstruct_image(
@@ -280,7 +289,8 @@ fn reconstruct_image(
     //println!("Tile before:\n{:?}", tile);
     for rotation in 0..4 {
         if edge_matches[&tile.get_edge(&EdgeDir::Left)].len() == 1
-                && edge_matches[&tile.get_edge(&EdgeDir::Top)].len() == 1 {
+            && edge_matches[&tile.get_edge(&EdgeDir::Top)].len() == 1
+        {
             break;
         } else {
             if rotation == 3 {
@@ -289,7 +299,7 @@ fn reconstruct_image(
             tile.rotate_ccw();
             //println!("Tile rotated:\n{:?}", tile);
         }
-    };
+    }
     // create a vec of tile references, and a row counter
     let mut tile_grid: Vec<Tile> = Vec::new();
     let mut edge_to_match: Edge;
@@ -312,11 +322,15 @@ fn reconstruct_image(
         };
         //println!("Pre-Match: tile_id {} at tile_index {} for targt_edge_dir {:?}, edge {:?},\n{:?}",
         //    tile_id, tile_index, targt_edge_dir, edge_to_match, &tile);
-        let &(next_tile_id, next_tile_edge_dir) = match edge_matches[&edge_to_match].iter()
-                .find(|(tid, _)| tid != &tile_id) {
+        let &(next_tile_id, next_tile_edge_dir) = match edge_matches[&edge_to_match]
+            .iter()
+            .find(|(tid, _)| tid != &tile_id)
+        {
             Some(ematch) => ematch,
-            None => panic!("No edge match found for tile_id {}, tile_index {} targt_edge_dir {:?}\n{:?}",
-                    tile_id, tile_index, targt_edge_dir, edge_matches[&edge_to_match]),
+            None => panic!(
+                "No edge match found for tile_id {}, tile_index {} targt_edge_dir {:?}\n{:?}",
+                tile_id, tile_index, targt_edge_dir, edge_matches[&edge_to_match]
+            ),
         };
         //println!("Match found: next_tile_id {} at tile_index {} for targt_edge_dir {:?}",
         //    next_tile_id, tile_index, targt_edge_dir);
@@ -329,10 +343,13 @@ fn reconstruct_image(
         }
         assert!(edge_to_match.0 == next_tile.get_edge(&targt_edge_dir).0);
         // safety check that the top edge matches (borders could be symmetric and then no flip would be triggered)
-        if tile_index > row_length && (tile_index % row_length) != 0{
+        if tile_index > row_length && (tile_index % row_length) != 0 {
             let above_tile = &tile_grid[tile_index - row_length];
             if above_tile.get_edge(&EdgeDir::Bottom).0 != next_tile.get_edge(&EdgeDir::Top).0 {
-                panic!("Tile does not match tile above \n{:?}\n\n{:?}", above_tile, next_tile);
+                panic!(
+                    "Tile does not match tile above \n{:?}\n\n{:?}",
+                    above_tile, next_tile
+                );
             }
         }
         // record tile for new image grid:
@@ -342,9 +359,9 @@ fn reconstruct_image(
         tile = next_tile;
     }
     tile_grid.push(tile); // final tile
-    // calculate dimensions of full image
-    // (row-length is the difference of length to remembered row-start index,
-    // every tile will change from 10x10 to 8x8 after removing borders)
+                          // calculate dimensions of full image
+                          // (row-length is the difference of length to remembered row-start index,
+                          // every tile will change from 10x10 to 8x8 after removing borders)
     let image_dim = row_length * 8;
     // fill a new Array2 with the center 8X8 from all tiles in order
     let mut image: Array2<u8> = Array2::<u8>::zeros((image_dim, image_dim));
@@ -360,11 +377,9 @@ fn reconstruct_image(
     image
 }
 
-
 fn count_value(array: ArrayView2<u8>, value: u8) -> usize {
     array.iter().filter(|&&num| num == value).count()
 }
-
 
 /// 2d cross-correlation of kernel on image with no padding, i.e. only multiply the kernel
 /// with the matching part of the image where it fully fits. Therefore returns
@@ -375,10 +390,11 @@ fn crosscorrelate2d_unpadded(image: ArrayView2<u8>, kernel: ArrayView2<u8>) -> A
     let kernel_cols = kernel.shape()[1];
     let num_rows = image.shape()[0] - kernel_rows + 1;
     let num_cols = image.shape()[1] - kernel_cols + 1;
-    let mut result= Array2::<u8>::zeros((num_rows, num_cols));
+    let mut result = Array2::<u8>::zeros((num_rows, num_cols));
     for row in 0..num_rows {
         for col in 0..num_cols {
-            result[[row,col]] = Zip::from(image.slice(s![row..row + kernel_rows, col..col + kernel_cols]))
+            result[[row, col]] =
+                Zip::from(image.slice(s![row..row + kernel_rows, col..col + kernel_cols]))
                     .and(&kernel)
                     .fold(0, |acc, &i, &k| acc + i * k);
         }
@@ -392,13 +408,11 @@ fn crosscorrelate2d_unpadded(image: ArrayView2<u8>, kernel: ArrayView2<u8>) -> A
 fn count_seamonster_hashes(image: ArrayView2<u8>, mut monster: Tile) -> usize {
     let monster_size = count_value(monster.pixels.view(), 1) as u8;
     let mut monster_count: usize;
-    for trial in 0..8 { // 8 possible orientations
+    for trial in 0..8 {
+        // 8 possible orientations
         // check if a convolution gets any result:
         let correlate = crosscorrelate2d_unpadded(image.view(), monster.pixels.view());
-        monster_count = count_value(
-            correlate.view(),
-            monster_size,
-        );
+        monster_count = count_value(correlate.view(), monster_size);
         //println!("monster_count {} (target size {}) for monster {:?} correlate {:?}",
         //        monster_count, monster_size, &monster, &correlate);
         if monster_count > 0 {
@@ -412,39 +426,43 @@ fn count_seamonster_hashes(image: ArrayView2<u8>, mut monster: Tile) -> usize {
     panic!("No monsters found in any orientation!");
 }
 
-
 pub fn run() {
-    let input = include_str!("input")
-            .trim()
-            .split("\n\n");
-    let tiles: HashMap<&str, Tile> = input
-            .map(tile_splitter)
-            .collect();
+    let input = include_str!("input").trim().split("\n\n");
+    let tiles: HashMap<&str, Tile> = input.map(tile_splitter).collect();
     //println!("Input: {:?}", &tiles["3371"]);
     let mut edge_matches: HashMap<Edge, Vec<(&str, EdgeDir)>> = HashMap::new();
     for (&tile_name, tile) in &tiles {
         for (edge, edge_dir) in tile.get_edges() {
-            edge_matches.entry(edge)
-                .or_insert_with(Vec::new).push((tile_name, edge_dir));
+            edge_matches
+                .entry(edge)
+                .or_insert_with(Vec::new)
+                .push((tile_name, edge_dir));
         }
     }
     //println!("Edge_map {:?}", edge_matches);
     let mut outer_edge_freq = HashMap::new();
-    for unique_edge_vec in edge_matches.values()
-            .filter(|&m_vec| m_vec.len() == 1) {
+    for unique_edge_vec in edge_matches.values().filter(|&m_vec| m_vec.len() == 1) {
         let tile_id = unique_edge_vec[0].0;
         *outer_edge_freq.entry(tile_id).or_insert(0) += 1;
     }
     //println!("Outer Edge Frequencies: {:?}", outer_edge_freq);
-    let corners: Vec<_> = outer_edge_freq.iter()
-            .filter_map(|(&k, &v)| {
-                if v == 2 { Some(k) } else { None }
-            }).collect();
+    let corners: Vec<_> = outer_edge_freq
+        .iter()
+        .filter_map(|(&k, &v)| if v == 2 { Some(k) } else { None })
+        .collect();
     println!("Corners: {:?}", corners);
-    println!("Product of corners: {}", corners.iter()
+    println!(
+        "Product of corners: {}",
+        corners
+            .iter()
             .map(|&tid| tid.parse::<u64>().unwrap())
-            .product::<u64>());
-    println!("{} Tiles and {} Outer Tiles", tiles.len(), outer_edge_freq.len());
+            .product::<u64>()
+    );
+    println!(
+        "{} Tiles and {} Outer Tiles",
+        tiles.len(),
+        outer_edge_freq.len()
+    );
     // reconstruct image by starting from a corner and filling a matrix:
     let image = reconstruct_image(tiles, &edge_matches, corners[0]);
     let num_hashes = count_value(image.view(), 1);
@@ -453,5 +471,8 @@ pub fn run() {
     let monster = Tile::from_str_shape(SEA_MONSTER, "monster", (3, 20));
     println!("the monster:\n{:?}", monster);
     let num_hashes_not_seamonster = num_hashes - count_seamonster_hashes(image.view(), monster);
-    println!("NOT PART OF SEA MONSTERS sum: {}", num_hashes_not_seamonster);
+    println!(
+        "NOT PART OF SEA MONSTERS sum: {}",
+        num_hashes_not_seamonster
+    );
 }

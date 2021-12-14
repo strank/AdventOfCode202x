@@ -16,14 +16,21 @@ type Matrix4 = [[[[bool; MAX_W]; MAX_Z]; MAX_Y]; MAX_X];
 /// displacement of coords from (-1, 0, 1) * 3 (dropping the initial (0, 0, 0))
 fn step(matrix: &mut Matrix) {
     let mut changes = Vec::new();
-    let coords = iproduct!(
-            1..(MAX_X - 1), 1..(MAX_Y - 1), 1..(MAX_Z - 1));
+    let coords = iproduct!(1..(MAX_X - 1), 1..(MAX_Y - 1), 1..(MAX_Z - 1));
     let displacement = iproduct!(&NEIGHBOR_OFFSETS, &NEIGHBOR_OFFSETS, &NEIGHBOR_OFFSETS).skip(1);
     for (x, y, z) in coords {
-        let neighbor_sum: u8 = displacement.clone()
-                .map(|(&i, &j, &k)|
-                    if matrix[(x as isize + i) as usize][(y as isize + j) as usize][(z as isize + k) as usize] { 1 } else { 0 })
-                .sum();
+        let neighbor_sum: u8 = displacement
+            .clone()
+            .map(|(&i, &j, &k)| {
+                if matrix[(x as isize + i) as usize][(y as isize + j) as usize]
+                    [(z as isize + k) as usize]
+                {
+                    1
+                } else {
+                    0
+                }
+            })
+            .sum();
         //println!("{} {} {} -> {}", x, y, z, neighbor_sum);
         if matrix[x][y][z] && !(2..=3).contains(&neighbor_sum) {
             changes.push((x, y, z));
@@ -42,13 +49,31 @@ fn step(matrix: &mut Matrix) {
 fn step4(matrix: &mut Matrix4) {
     let mut changes = Vec::new();
     let coords = iproduct!(
-            1..(MAX_X - 1), 1..(MAX_Y - 1), 1..(MAX_Z - 1), 1..(MAX_W - 1));
-    let displacement = iproduct!(&NEIGHBOR_OFFSETS, &NEIGHBOR_OFFSETS, &NEIGHBOR_OFFSETS, &NEIGHBOR_OFFSETS).skip(1);
+        1..(MAX_X - 1),
+        1..(MAX_Y - 1),
+        1..(MAX_Z - 1),
+        1..(MAX_W - 1)
+    );
+    let displacement = iproduct!(
+        &NEIGHBOR_OFFSETS,
+        &NEIGHBOR_OFFSETS,
+        &NEIGHBOR_OFFSETS,
+        &NEIGHBOR_OFFSETS
+    )
+    .skip(1);
     for (x, y, z, w) in coords {
-        let neighbor_sum: u8 = displacement.clone()
-                .map(|(&i, &j, &k, &l)|
-                    if matrix[(x as isize + i) as usize][(y as isize + j) as usize][(z as isize + k) as usize][(w as isize + l) as usize] { 1 } else { 0 })
-                .sum();
+        let neighbor_sum: u8 = displacement
+            .clone()
+            .map(|(&i, &j, &k, &l)| {
+                if matrix[(x as isize + i) as usize][(y as isize + j) as usize]
+                    [(z as isize + k) as usize][(w as isize + l) as usize]
+                {
+                    1
+                } else {
+                    0
+                }
+            })
+            .sum();
         //println!("{} {} {} -> {}", x, y, z, neighbor_sum);
         if matrix[x][y][z][w] && !(2..=3).contains(&neighbor_sum) {
             changes.push((x, y, z, w));
@@ -65,9 +90,9 @@ fn step4(matrix: &mut Matrix4) {
 
 pub fn run() {
     let input: Vec<&str> = include_str!("input")
-            .split('\n')
-            .map(|a| a.trim())
-            .collect();
+        .split('\n')
+        .map(|a| a.trim())
+        .collect();
     println!("input:\n{:?}\n", input);
 
     // need a three dimensional data structure
@@ -83,9 +108,12 @@ pub fn run() {
         step(&mut matrix);
     }
     // count active cells:
-    let active_count:u64 = matrix.iter().flatten().flatten()
-            .map(|&b| if b { 1 } else { 0 })
-            .sum();
+    let active_count: u64 = matrix
+        .iter()
+        .flatten()
+        .flatten()
+        .map(|&b| if b { 1 } else { 0 })
+        .sum();
     println!("Active count {}", active_count);
 
     let mut matrix4: Matrix4 = [[[[false; MAX_W]; MAX_Z]; MAX_Y]; MAX_X];
@@ -98,18 +126,20 @@ pub fn run() {
         step4(&mut matrix4);
     }
     // count active cells:
-    let active_count:u64 = matrix4.iter().flatten().flatten().flatten()
-            .map(|&b| if b { 1 } else { 0 })
-            .sum();
+    let active_count: u64 = matrix4
+        .iter()
+        .flatten()
+        .flatten()
+        .flatten()
+        .map(|&b| if b { 1 } else { 0 })
+        .sum();
     println!("Active count 4D {}", active_count);
-
-
 
     // Better Ideas:
 
     // nested arrays with fixed dimension,
     // maybe "override the Index trait", so I can use tuple coordinates
-    // with automatic translation from cartesian coords to 0-based indexing 
+    // with automatic translation from cartesian coords to 0-based indexing
 
     // generator for getting the neighbor coordinates!
 }

@@ -1,6 +1,6 @@
+use num::{PrimInt, Unsigned};
 use std::collections::HashMap;
 use std::iter;
-use num::{PrimInt, Unsigned};
 
 /// https://adventofcode.com/2021/day/5
 /// given a list of line segments
@@ -26,9 +26,9 @@ const _TEST_INPUT: &str = "
 5,5 -> 8,2
 "; // --> answer 5
 
-
-fn abs_diff<U>(slf: U, other: U)  -> U
-    where U: PrimInt + Unsigned
+fn abs_diff<U>(slf: U, other: U) -> U
+where
+    U: PrimInt + Unsigned,
 {
     if slf < other {
         other - slf
@@ -36,7 +36,6 @@ fn abs_diff<U>(slf: U, other: U)  -> U
         slf - other
     }
 }
-
 
 fn calc_points_use_count(line_specs: &[LineSpec], diag: bool) -> PosMap {
     let mut points_used = PosMap::new();
@@ -48,13 +47,23 @@ fn calc_points_use_count(line_specs: &[LineSpec], diag: bool) -> PosMap {
             }
         }
         let a_range: Box<dyn Iterator<Item = usize>> = if a != x {
-            if x > a { Box::new(*a..=*x) } else { Box::new((*x..=*a).rev()) }
-        } else { // repeat a as needed:
+            if x > a {
+                Box::new(*a..=*x)
+            } else {
+                Box::new((*x..=*a).rev())
+            }
+        } else {
+            // repeat a as needed:
             Box::new(iter::repeat(*a))
         };
         let b_range: Box<dyn Iterator<Item = usize>> = if b != y {
-            if y > b { Box::new(*b..=*y) } else { Box::new((*y..=*b).rev()) }
-        } else { // repeat b as needed:
+            if y > b {
+                Box::new(*b..=*y)
+            } else {
+                Box::new((*y..=*b).rev())
+            }
+        } else {
+            // repeat b as needed:
             Box::new(iter::repeat(*b))
         };
         for (index_a, index_b) in a_range.zip(b_range) {
@@ -64,40 +73,45 @@ fn calc_points_use_count(line_specs: &[LineSpec], diag: bool) -> PosMap {
     points_used
 }
 
-
 fn get_doubly_used_points(points_used: &PosMap) -> usize {
-    points_used.values()
-        .filter(|count| count > &&1)
-        .count()
+    points_used.values().filter(|count| count > &&1).count()
 }
-
 
 fn str_to_usize(a_str: &str) -> usize {
     a_str.parse::<usize>().unwrap()
 }
 
-
 fn line_splitter(line: &str) -> LineSpec {
     // very verbose, next time try itertools::next_tuple
-    match line.trim().split(&[',', ' ', '-', '>'][..]).collect::<Vec<&str>>()[..] {
-        [startx, starty, _, _, _, endx, endy, ..] => {
-            ((str_to_usize(startx), str_to_usize(starty)),
-             (str_to_usize(endx), str_to_usize(endy)))
-        },
+    match line
+        .trim()
+        .split(&[',', ' ', '-', '>'][..])
+        .collect::<Vec<&str>>()[..]
+    {
+        [startx, starty, _, _, _, endx, endy, ..] => (
+            (str_to_usize(startx), str_to_usize(starty)),
+            (str_to_usize(endx), str_to_usize(endy)),
+        ),
         _ => panic!("No line-spec found!"),
     }
 }
 
 pub fn run() {
     let line_specs: Vec<_> = include_str!("input")
-            .trim()
-            .split('\n')
-            .map(line_splitter)
-            .collect();
+        .trim()
+        .split('\n')
+        .map(line_splitter)
+        .collect();
     //println!("lines:\n{:?}", line_specs);
     let points_used = calc_points_use_count(&line_specs, false);
-    println!("Number of doubly used points: {}", get_doubly_used_points(&points_used));
+    println!(
+        "Number of doubly used points: {}",
+        get_doubly_used_points(&points_used)
+    );
     let points_used = calc_points_use_count(&line_specs, true);
     //println!("points used:\n{:?}", points_used);
-    println!("Number of doubly used points: {}", get_doubly_used_points(&points_used));
+    println!(
+        "Number of doubly used points: {}",
+        get_doubly_used_points(&points_used)
+    );
 }
