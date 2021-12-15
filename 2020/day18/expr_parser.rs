@@ -1,8 +1,22 @@
-use std::iter::Peekable;
-
 /// https://adventofcode.com/2020/day/18
 /// parse numeric expression with parenthesis, plus and times.
 /// the operators have the same precedence so evaluate left to right!
+
+const INPUT: &str = include_str!("input");
+
+/// 2 * 3 + (4 * 5) becomes 26.
+/// 5 + (8 * 3 + 9 + 3 * 4 * 3) becomes 437.
+/// 5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4)) becomes 12240.
+/// ((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2 becomes 13632.
+const EXAMPLE_INPUT: &str = "
+2 * 3 + (4 * 5)
+5 + (8 * 3 + 9 + 3 * 4 * 3)
+5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))
+((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2
+(2 * (2 * 3)) + 4
+";
+
+use std::iter::Peekable;
 
 fn parse_expr(token_stream: &mut impl Iterator<Item = char>) -> Vec<char> {
     let mut polish: Vec<char> = Vec::new();
@@ -90,20 +104,8 @@ fn eval_expr(p_expr: &Vec<char>) -> u64 {
     operand_stack.pop().unwrap()
 }
 
-/// 2 * 3 + (4 * 5) becomes 26.
-/// 5 + (8 * 3 + 9 + 3 * 4 * 3) becomes 437.
-/// 5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4)) becomes 12240.
-/// ((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2 becomes 13632.
-const _TEST_INPUT: &str = "
-2 * 3 + (4 * 5)
-5 + (8 * 3 + 9 + 3 * 4 * 3)
-5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))
-((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2
-(2 * (2 * 3)) + 4
-";
-
-pub fn run() -> String {
-    let input = include_str!("input").trim().split('\n');
+pub fn process_input(input: &str) -> String {
+    let input = input.trim().split('\n');
     //println!("input:\n{:?}\n", input);
     let token_streams = input.map(|a| a.chars().filter(|&c| c != ' '));
     // TODO: there should be a nicer way that doesn't create any intermediate Vec
@@ -121,4 +123,12 @@ pub fn run() -> String {
     let evaluated_sum: u64 = parsed_exprs2.iter().map(eval_expr).sum();
     println!("Sum of expressions, part 2: {}", evaluated_sum);
     format!("TODO")
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

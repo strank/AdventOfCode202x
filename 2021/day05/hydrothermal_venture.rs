@@ -1,19 +1,24 @@
-use num::{PrimInt, Unsigned};
-use std::collections::HashMap;
-use std::iter;
+//! https://adventofcode.com/2021/day/5
+//! given a list of line segments
+//! a,b -> x,y
+//! record all points that the line segments touch.
+//! first part: how many points get touched more than once?
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2021day05::run;
+//! assert!(run().contains(
+//!     "Number of doubly used points, straight-only: 6311\nNumber of doubly used points: 19929"));
+//! ```
 
-/// https://adventofcode.com/2021/day/5
-/// given a list of line segments
-/// a,b -> x,y
-/// record all points that the line segments touch.
-/// first part: how many points get touched more than once?
+const INPUT: &str = include_str!("input");
 
-type Point = (usize, usize);
-type LineSpec = (Point, Point);
-/// hashmap that records how often a point is used by lines
-type PosMap = HashMap<Point, usize>;
-
-const _TEST_INPUT: &str = "
+/// example answer 5
+/// ```
+/// use advent_of_code_202x::generated::year2021day05::run_example;
+/// assert!(run_example().contains(
+///     "Number of doubly used points, straight-only: 5\nNumber of doubly used points: 12"));
+/// ```
+const EXAMPLE_INPUT: &str = "
 0,9 -> 5,9
 8,0 -> 0,8
 9,4 -> 3,4
@@ -24,7 +29,16 @@ const _TEST_INPUT: &str = "
 3,4 -> 1,4
 0,0 -> 8,8
 5,5 -> 8,2
-"; // --> answer 5
+";
+
+use num::{PrimInt, Unsigned};
+use std::collections::HashMap;
+use std::iter;
+
+type Point = (usize, usize);
+type LineSpec = (Point, Point);
+/// hashmap that records how often a point is used by lines
+type PosMap = HashMap<Point, usize>;
 
 fn abs_diff<U>(slf: U, other: U) -> U
 where
@@ -96,8 +110,8 @@ fn line_splitter(line: &str) -> LineSpec {
     }
 }
 
-pub fn run() -> String {
-    let line_specs: Vec<_> = include_str!("input")
+pub fn process_input(input: &str) -> String {
+    let line_specs: Vec<_> = input
         .trim()
         .split('\n')
         .map(line_splitter)
@@ -110,4 +124,12 @@ pub fn run() -> String {
         get_doubly_used_points(&points_used_1),
         get_doubly_used_points(&points_used_2)
     )
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

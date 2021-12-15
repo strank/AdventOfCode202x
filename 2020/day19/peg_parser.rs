@@ -1,5 +1,3 @@
-use std::collections::{HashMap, HashSet};
-
 /// https://adventofcode.com/2020/day/19
 /// parse ab strings based on a grammar that only uses the sequence and choice operators.
 /// This is probably meant to be done with just recursive descent parsing,
@@ -8,6 +6,75 @@ use std::collections::{HashMap, HashSet};
 /// (Maybe later also implement left-recursion like in this paper:
 /// https://web.cs.ucla.edu/~todd/research/pepm08.pdf
 /// this is also roughtly what's implemented in python's new peg parser.)
+
+const INPUT: &str = include_str!("input");
+
+const EXAMPLE_INPUT: &str = "
+0: 4 1 5
+1: 2 3 | 3 2
+2: 4 4 | 5 5
+3: 4 5 | 5 4
+4: \"a\"
+5: \"b\"
+
+ababbb
+bababa
+abbbab
+aaabbb
+aaaabbb
+"; // --> answer 2
+
+const _EXAMPLE_INPUT2: &str = "
+42: 9 14 | 10 1
+9: 14 27 | 1 26
+10: 23 14 | 28 1
+1: \"a\"
+11: 42 31
+5: 1 14 | 15 1
+19: 14 1 | 14 14
+12: 24 14 | 19 1
+16: 15 1 | 14 14
+31: 14 17 | 1 13
+6: 14 14 | 1 14
+2: 1 24 | 14 4
+0: 8 11
+13: 14 3 | 1 12
+15: 1 | 14
+17: 14 2 | 1 7
+23: 25 1 | 22 14
+28: 16 1
+4: 1 1
+20: 14 14 | 1 15
+3: 5 14 | 16 1
+27: 1 6 | 14 18
+14: \"b\"
+21: 14 1 | 1 14
+25: 1 1 | 1 14
+22: 14 14
+8: 42
+26: 14 22 | 1 20
+18: 15 15
+7: 14 5 | 1 21
+24: 14 1
+
+abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa
+bbabbbbaabaabba
+babbbbaabbbbbabbbbbbaabaaabaaa
+aaabbbbbbaaaabaababaabababbabaaabbababababaaa
+bbbbbbbaaaabbbbaaabbabaaa
+bbbababbbbaaaaaaaabbababaaababaabab
+ababaaaaaabaaab
+ababaaaaabbbaba
+baabbaaaabbaaaababbaababb
+abbbbabbbbaaaababbbbbbaaaababb
+aaaaabbaabaaaaababaa
+aaaabbaaaabbaaa
+aaaabbaabbaaaaaaabbbabbbaaabbaabaaa
+babaaabbbaaabaababbaabababaaab
+aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba
+";
+
+use std::collections::{HashMap, HashSet};
 
 type PosSet = HashSet<usize>;
 
@@ -98,71 +165,6 @@ impl<'a> ParseRun<'a> {
     }
 }
 
-const _TEST_INPUT: &str = "
-0: 4 1 5
-1: 2 3 | 3 2
-2: 4 4 | 5 5
-3: 4 5 | 5 4
-4: \"a\"
-5: \"b\"
-
-ababbb
-bababa
-abbbab
-aaabbb
-aaaabbb
-"; // --> answer 2
-
-const _TEST_INPUT2: &str = "
-42: 9 14 | 10 1
-9: 14 27 | 1 26
-10: 23 14 | 28 1
-1: \"a\"
-11: 42 31
-5: 1 14 | 15 1
-19: 14 1 | 14 14
-12: 24 14 | 19 1
-16: 15 1 | 14 14
-31: 14 17 | 1 13
-6: 14 14 | 1 14
-2: 1 24 | 14 4
-0: 8 11
-13: 14 3 | 1 12
-15: 1 | 14
-17: 14 2 | 1 7
-23: 25 1 | 22 14
-28: 16 1
-4: 1 1
-20: 14 14 | 1 15
-3: 5 14 | 16 1
-27: 1 6 | 14 18
-14: \"b\"
-21: 14 1 | 1 14
-25: 1 1 | 1 14
-22: 14 14
-8: 42
-26: 14 22 | 1 20
-18: 15 15
-7: 14 5 | 1 21
-24: 14 1
-
-abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa
-bbabbbbaabaabba
-babbbbaabbbbbabbbbbbaabaaabaaa
-aaabbbbbbaaaabaababaabababbabaaabbababababaaa
-bbbbbbbaaaabbbbaaabbabaaa
-bbbababbbbaaaaaaaabbababaaababaabab
-ababaaaaaabaaab
-ababaaaaabbbaba
-baabbaaaabbaaaababbaababb
-abbbbabbbbaaaababbbbbbaaaababb
-aaaaabbaabaaaaababaa
-aaaabbaaaabbaaa
-aaaabbaabbaaaaaaabbbabbbaaabbaabaaa
-babaaabbbaaabaababbaabababaaab
-aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba
-";
-
 // now the choice of PEG parsing is biting me,
 // as these rules, especially the 8 rule seem to be ambiguous,
 // and thus need backtracking...
@@ -179,8 +181,8 @@ fn rule_splitter(r: &str) -> (&str, &str) {
     }
 }
 
-pub fn run() -> String {
-    let input: Vec<_> = include_str!("input").trim().split("\n\n").collect();
+pub fn process_input(input: &str) -> String {
+    let input: Vec<_> = input.trim().split("\n\n").collect();
     let mut rules: HashMap<&str, &str> = input[0].split('\n').map(rule_splitter).collect();
     let messages: Vec<_> = input[1].split('\n').collect();
     //println!("rules:\n{:?}\nmessages:\n{:?}", rules, messages);
@@ -201,4 +203,12 @@ pub fn run() -> String {
     println!("Part 2, matches: {:?}", matched_messages);
     println!("Part 2, Number of matches: {}", matched_messages.len());
     format!("TODO")
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

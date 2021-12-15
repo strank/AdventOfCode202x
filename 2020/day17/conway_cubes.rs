@@ -1,3 +1,7 @@
+const INPUT: &str = include_str!("input");
+
+const EXAMPLE_INPUT: &str = "TODO";
+
 use itertools::iproduct;
 
 const MAX_X: usize = 22;
@@ -88,8 +92,8 @@ fn step4(matrix: &mut Matrix4) {
     }
 }
 
-pub fn run() -> String {
-    let input: Vec<&str> = include_str!("input")
+pub fn process_input(input: &str) -> String {
+    let input: Vec<&str> = input
         .split('\n')
         .map(|a| a.trim())
         .collect();
@@ -143,4 +147,12 @@ pub fn run() -> String {
     // with automatic translation from cartesian coords to 0-based indexing
 
     // generator for getting the neighbor coordinates!
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

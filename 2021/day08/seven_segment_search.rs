@@ -6,16 +6,15 @@
 //! assert!(run().contains("num of unique len outputs: 375\nsum of outputs: 1019355"));
 //! ```
 
-use std::collections::{BTreeSet, HashMap};
-
-/// an entry has the 10 unique segment patterns observed, and 4 specific output values seen:
-type SegmentPattern = BTreeSet<char>;
-type DisplayEntry = ([SegmentPattern; 10], [SegmentPattern; 4]);
-/// need to find a mapping from pattern to digit:
-type DigitMapping = HashMap<SegmentPattern, usize>;
-
 const INPUT: &str = include_str!("input");
-const _TEST_INPUT: &str = "
+
+/// example answer 26 instances of digits 1,4,7,8 in the output part
+/// example answer 61229 for summing up 4-digit outputs
+/// ```
+/// use advent_of_code_202x::generated::year2021day08::run_example;
+/// assert!(run_example().contains("num of unique len outputs: 26\nsum of outputs: 61229"));
+/// ```
+const EXAMPLE_INPUT: &str = "
 be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
 edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
 fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
@@ -27,8 +26,15 @@ bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbg
 egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
 gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
 ";
-// --> answer 26 instances of digits 1,4,7,8 in the output part
-// --> answer 61229 for summing up 4-digit outputs
+
+use std::collections::{BTreeSet, HashMap};
+
+/// pattern of segments is a set of segment labels (char) unordered. Set operations are helpful:
+type SegmentPattern = BTreeSet<char>;
+/// an entry has the 10 unique segment patterns observed, and 4 specific output values seen:
+type DisplayEntry = ([SegmentPattern; 10], [SegmentPattern; 4]);
+/// need to find a mapping from pattern to digit:
+type DigitMapping = HashMap<SegmentPattern, usize>;
 
 fn count_unique_len_outputs(entries: &[DisplayEntry]) -> usize {
     entries
@@ -152,8 +158,8 @@ fn str_to_display_entry(a_str: &str) -> DisplayEntry {
     )
 }
 
-pub fn run() -> String {
-    let input = INPUT.trim().split('\n');
+pub fn process_input(input: &str) -> String {
+    let input = input.trim().split('\n');
     let displays: Vec<DisplayEntry> = input.map(str_to_display_entry).collect();
     //println!("displays:\n{:?}", displays);
     let num_of_unique_outputs = count_unique_len_outputs(&displays);
@@ -162,4 +168,12 @@ pub fn run() -> String {
         "num of unique len outputs: {}\nsum of outputs: {}",
         num_of_unique_outputs, sum_of_outputs
     )
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

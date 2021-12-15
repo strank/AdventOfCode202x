@@ -15,6 +15,32 @@
 //!
 //! so going east, for example, increases x, but decreases y (z stays the same)
 
+const INPUT: &str = include_str!("input");
+
+const EXAMPLE_INPUT: &str = "
+sesenwnenenewseeswwswswwnenewsewsw
+neeenesenwnwwswnenewnwwsewnenwseswesw
+seswneswswsenwwnwse
+nwnwneseeswswnenewneswwnewseswneseene
+swweswneswnenwsewnwneneseenw
+eesenwseswswnenwswnwnwsewwnwsene
+sewnenenenesenwsewnenwwwse
+wenwwweseeeweswwwnwwe
+wsweesenenewnwwnwsenewsenwwsesesenwne
+neeswseenwwswnwswswnw
+nenwswwsewswnenenewsenwsenwnesesenew
+enewnwewneswsewnwswenweswnenwsenwsw
+sweneswneswneneenwnewenewwneswswnese
+swwesenesewenwneswnwwneseswwne
+enesenwswwswneneswsenwnewswseenwsese
+wnwnesenesenenwwnenwsewesewsesesew
+nenewswnwewswnenesenwnesewesw
+eneswnwswnwsenenwnwnwwseeswneewsenese
+neswnwewnwnwseenwseesewsenwsweewe
+wseweeenwnesenwwwswnew
+";
+// --> answer 10 tiles black
+
 use phf::phf_map;
 use std::collections::{HashMap, HashSet};
 
@@ -48,30 +74,6 @@ static DIRS: phf::Map<&str, HexCoord> = phf_map! {
     "ne" => HexCoord { x:  1, y:  0 },
     "sw" => HexCoord { x: -1, y:  0 },
 };
-
-const _TEST_INPUT: &str = "
-sesenwnenenewseeswwswswwnenewsewsw
-neeenesenwnwwswnenewnwwsewnenwseswesw
-seswneswswsenwwnwse
-nwnwneseeswswnenewneswwnewseswneseene
-swweswneswnenwsewnwneneseenw
-eesenwseswswnenwswnwnwsewwnwsene
-sewnenenenesenwsewnenwwwse
-wenwwweseeeweswwwnwwe
-wsweesenenewnwwnwsenewsenwwsesesenwne
-neeswseenwwswnwswswnw
-nenwswwsewswnenenewsenwsenwnesesenew
-enewnwewneswsewnwswenweswnenwsenwsw
-sweneswneswneneenwnewenewwneswswnese
-swwesenesewenwneswnwwneseswwne
-enesenwswwswneneswsenwnewswseenwsese
-wnwnesenesenenwwnenwsewesewsesesew
-nenewswnwewswnenesenwnesewesw
-eneswnwswnwsenenwnwnwwseeswneewsenese
-neswnwewnwnwseenwseesewsenwsweewe
-wseweeenwnesenwwwswnew
-";
-// --> answer 10 tiles black
 
 fn flip_tiles(lines: &[&str]) -> HashSet<HexCoord> {
     let mut flipped_tiles = HashSet::new();
@@ -132,8 +134,8 @@ fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
     black_tiles
 }
 
-pub fn run() -> String {
-    let input: Vec<_> = include_str!("input").trim().split('\n').collect();
+pub fn process_input(input: &str) -> String {
+    let input: Vec<_> = input.trim().split('\n').collect();
     let black_tiles_1 = flip_tiles(&input);
     let black_tiles_1_len = black_tiles_1.len();
     let black_tiles_2 = game_of_life(black_tiles_1);
@@ -142,4 +144,12 @@ pub fn run() -> String {
         black_tiles_1_len,
         black_tiles_2.len()
     )
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

@@ -33,15 +33,26 @@ fn write_generated_module(
     writeln!(file, "    [{}]", entries.join(", "))?;
     writeln!(file, "}}")?;
     writeln!(file)?;
-    writeln!(file, "/// Return an array of 26 run functions")?;
+    writeln!(file, "pub type RunFn = fn() -> String;")?;
+    writeln!(file)?;
+    writeln!(file, "#[derive(PartialEq, Copy, Clone)]")?;
+    writeln!(file, "pub struct AOCRunFns {{")?;
+    writeln!(file, "    pub run: RunFn,")?;
+    writeln!(file, "    pub example: RunFn,")?;
+    writeln!(file, "}}")?;
+    writeln!(file)?;
+    writeln!(
+        file,
+        "/// Return an array of 26 tuples of functions (run, run_example)"
+    )?;
     writeln!(file, "/// (26 rather than 25 for clean 1-based indexing)")?;
     writeln!(
         file,
-        "pub fn get_days(year: usize) -> [Option<fn() -> String>; 26] {{"
+        "pub fn get_days(year: usize) -> [Option<AOCRunFns>; 26] {{"
     )?;
     writeln!(
         file,
-        "    let mut days: [Option<fn() -> String>; 26] = [None; 26];"
+        "    let mut days: [Option<AOCRunFns>; 26] = [None; 26];"
     )?;
     writeln!(file, "    match year {{")?;
     for year_entry in &entries {
@@ -50,11 +61,22 @@ fn write_generated_module(
             let path_str = path_buf.to_str().unwrap().replace("\\", "/");
             writeln!(
                 file,
-                "            days[{}] = Some(year{}{}::run);",
+                "            days[{}] = Some(AOCRunFns {{",
                 path_str.get(8..10).unwrap().trim_start_matches('0'),
-                year_entry,
-                path_str.get(5..10).unwrap()
             )?;
+            writeln!(
+                file,
+                "                run: year{}{}::run,",
+                year_entry,
+                path_str.get(5..10).unwrap(),
+            )?;
+            writeln!(
+                file,
+                "                example: year{}{}::run_example,",
+                year_entry,
+                path_str.get(5..10).unwrap(),
+            )?;
+            writeln!(file, "            }});")?;
         }
         writeln!(file, "        }}")?;
     }

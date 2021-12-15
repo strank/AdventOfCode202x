@@ -1,5 +1,3 @@
-use std::collections::{HashSet, VecDeque};
-
 /// https://adventofcode.com/2020/day/22
 /// Card game with a crab
 
@@ -7,7 +5,9 @@ use std::collections::{HashSet, VecDeque};
 /// The winner keeps both cards, placing them on the bottom of their own deck so that
 /// the winner's card is above the other card.
 
-const _TEST_INPUT: &str = "
+const INPUT: &str = include_str!("input");
+
+const EXAMPLE_INPUT: &str = "
 Player 1:
 9
 2
@@ -33,6 +33,8 @@ Player 2:
    // +  7 *  2
    // +  1 *  1
    // = 306
+
+use std::collections::{HashSet, VecDeque};
 
 type Deck = VecDeque<usize>;
 
@@ -124,8 +126,8 @@ fn cards_splitter(lines: &str) -> Deck {
         .collect()
 }
 
-pub fn run() -> String {
-    let input = include_str!("input").trim().split("\n\n");
+pub fn process_input(input: &str) -> String {
+    let input = input.trim().split("\n\n");
     let players: Vec<Deck> = input.map(cards_splitter).collect();
     //println!("Input: {:?}", &players);
     let (winner_1, winning_deck_1) = play_combat(players.clone());
@@ -139,4 +141,12 @@ pub fn run() -> String {
         recursive_winner + 1,
         calc_score(winning_deck_2)
     )
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

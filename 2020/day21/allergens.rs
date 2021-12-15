@@ -1,9 +1,9 @@
-use std::collections::{HashMap, HashSet};
-
 /// https://adventofcode.com/2020/day/21
 /// Identify allergens in unknown language
 
-const _TEST_INPUT: &str = "
+const INPUT: &str = include_str!("input");
+
+const EXAMPLE_INPUT: &str = "
 mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
 trh fvjkl sbzzf mxmxvkd (contains dairy)
 sqjhc fvjkl (contains soy)
@@ -11,6 +11,8 @@ sqjhc mxmxvkd sbzzf (contains fish)
 "; // --> answer
    // part1: kfcds, nhms, sbzzf, or trh cannot contain an allergen
    // they appear 5 times in total
+
+use std::collections::{HashMap, HashSet};
 
 fn food_splitter(line: &str) -> (Vec<&str>, Vec<&str>) {
     let mut ingrs_allergens = line.split(" (contains ");
@@ -24,8 +26,8 @@ fn food_splitter(line: &str) -> (Vec<&str>, Vec<&str>) {
     (ingrs, allergens)
 }
 
-pub fn run() -> String {
-    let input = include_str!("input").trim().split('\n');
+pub fn process_input(input: &str) -> String {
+    let input = input.trim().split('\n');
     let foods: Vec<_> = input.map(food_splitter).collect();
     //println!("Input: {:?}", &foods);
     let mut ingr_counts = HashMap::new();
@@ -97,4 +99,12 @@ pub fn run() -> String {
         .collect();
     println!("{}", translations.join(","));
     format!("TODO")
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

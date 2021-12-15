@@ -1,11 +1,21 @@
+//! https://adventofcode.com/2021/day/7
+//! based on a list of horizontal positions, find the position with minimum sum of distances
+//! (the position to align crabs on using minimal fuel to get them there)
+//! ```
+//! use advent_of_code_202x::generated::year2021day07::run;
+//! assert!(run().contains("fuel for pos 311: 347011\ntriangular fuel for pos 464: 98363777"));
+//! ```
+
+const INPUT: &str = include_str!("input");
+
+/// example answer 37 fuel to align to position 2
+/// ```
+/// use advent_of_code_202x::generated::year2021day07::run_example;
+/// assert!(run_example().contains("fuel for pos 2: 37\ntriangular fuel for pos 5: 168"));
+/// ```
+const EXAMPLE_INPUT: &str = "16,1,2,0,4,2,7,1,2,14";
+
 use num::{PrimInt, Unsigned};
-
-/// https://adventofcode.com/2021/day/7
-/// based on a list of horizontal positions, find the position with minimum sum of distances
-/// (the position to align crabs on using minimal fuel to get them there)
-
-const _TEST_INPUT: &str = "16,1,2,0,4,2,7,1,2,14";
-// --> answer 37 fuel to align to position 2
 
 fn abs_diff<U>(slf: U, other: U) -> U
 where
@@ -66,8 +76,8 @@ fn str_to_usize(a_str: &str) -> usize {
     a_str.parse::<usize>().unwrap()
 }
 
-pub fn run() -> String {
-    let mut positions: Vec<_> = include_str!("input")
+pub fn process_input(input: &str) -> String {
+    let mut positions: Vec<_> = input
         .trim()
         .split(',')
         .map(str_to_usize)
@@ -79,7 +89,15 @@ pub fn run() -> String {
     // different distance measure in part 2: triangular number
     let (best_position, fuel_use_t) = find_best_fuel_use_triangular(&positions);
     format!(
-        "fuel use for position {}: {}\ntriangular fuel use for position {}: {}",
+        "fuel for pos {}: {}\ntriangular fuel for pos {}: {}",
         median_position, fuel_use, best_position, fuel_use_t
     )
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

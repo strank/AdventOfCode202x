@@ -4,10 +4,10 @@
 //! part 1 implemented directly by holding the cup numbers in a vec
 //! part 2 needed a more efficient representation: neighbour links
 
-const _TEST_INPUT: &str = "389125467";
-// --> answer after 100 moves: (1) 67384529
-
 const INPUT: &str = "614752839";
+
+const EXAMPLE_INPUT: &str = "389125467";
+// --> answer after 100 moves: (1) 67384529
 
 type Cups = Vec<usize>;
 
@@ -98,8 +98,8 @@ fn cups_splitter(line: &str) -> Cups {
         .collect()
 }
 
-pub fn run() -> String {
-    let starting_cups: Cups = cups_splitter(INPUT);
+pub fn process_input(input: &str) -> String {
+    let starting_cups: Cups = cups_splitter(input);
     //println!("Input: {:?}", &starting_cups);
     let part1_cups = play_game(starting_cups.clone());
     // part 2: extend cups to 1 million, do 10 million moves
@@ -125,4 +125,12 @@ pub fn run() -> String {
         b,
         a as u64 * b as u64
     )
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

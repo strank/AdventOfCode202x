@@ -1,19 +1,9 @@
-use ndarray::{prelude::*, Zip};
-use std::{
-    collections::HashMap,
-    hash::{Hash, Hasher},
-};
-
 /// https://adventofcode.com/2020/day/20
 /// Match image tiles based on their borders
 
-const SEA_MONSTER: &str = "
-                  # X
-#    ##    ##    ###X
- #  #  #  #  #  #   X
-";
+const INPUT: &str = include_str!("input");
 
-const _TEST_INPUT: &str = "
+const EXAMPLE_INPUT: &str = "
 Tile 2311:
 ..##.#..#.
 ##..#.....
@@ -142,6 +132,18 @@ Tile 3079:
 // and keep a full mapping of all flip-ignoring "unique" edges to their tile ids
 // so we can then reconstruct a full image tile by tile
 
+use ndarray::{prelude::*, Zip};
+use std::{
+    collections::HashMap,
+    hash::{Hash, Hasher},
+};
+
+const SEA_MONSTER: &str = "
+                  # X
+#    ##    ##    ###X
+ #  #  #  #  #  #   X
+";
+
 /// A Edge tuple struct that simply changes the equality and hash of a String to consider
 /// a reversed string identical
 #[derive(Debug)]
@@ -166,9 +168,9 @@ impl Hash for Edge {
 }
 
 #[derive(Debug, Clone)]
-struct Tile<'a> {
+struct Tile {
     pixels: Array2<u8>,
-    id: &'a str,
+    id: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -190,12 +192,12 @@ impl EdgeDir {
     }
 }
 
-impl Tile<'_> {
-    fn from_str(tile_string: &str, tile_id: &'static str) -> Self {
+impl Tile {
+    fn from_str(tile_string: &str, tile_id: &str) -> Self {
         Tile::from_str_shape(tile_string, tile_id, (10, 10))
     }
 
-    fn from_str_shape(tile_string: &str, tile_id: &'static str, shape: (usize, usize)) -> Self {
+    fn from_str_shape(tile_string: &str, tile_id: &str, shape: (usize, usize)) -> Self {
         Tile {
             pixels: Array::from_shape_vec(
                 shape, // hard-coded size!
@@ -213,7 +215,7 @@ impl Tile<'_> {
                     .collect(),
             )
             .unwrap(),
-            id: tile_id,
+            id: tile_id.to_owned(),
         }
     }
 
@@ -267,7 +269,7 @@ impl Tile<'_> {
     }
 }
 
-fn tile_splitter(r: &'static str) -> (&str, Tile) {
+fn tile_splitter(r: &str) -> (&str, Tile) {
     // very verbose, next time try itertools::next_tuple
     match r.split(":\n").collect::<Vec<&str>>()[..] {
         [name, tile_data, ..] => (&name[5..], Tile::from_str(tile_data, &name[5..])),
@@ -317,7 +319,7 @@ fn reconstruct_image(
             //println!("Row-start at tile_index {}, matching bottom of index {}\nROWSTARTTILE {:?}",
             //    tile_index, tile_index - row_length, row_start_tile);
             edge_to_match = row_start_tile.get_edge(&EdgeDir::Bottom);
-            tile_id = row_start_tile.id;
+            tile_id = &row_start_tile.id;
             EdgeDir::Top
         };
         //println!("Pre-Match: tile_id {} at tile_index {} for targt_edge_dir {:?}, edge {:?},\n{:?}",
@@ -426,8 +428,8 @@ fn count_seamonster_hashes(image: ArrayView2<u8>, mut monster: Tile) -> usize {
     panic!("No monsters found in any orientation!");
 }
 
-pub fn run() -> String {
-    let input = include_str!("input").trim().split("\n\n");
+pub fn process_input(input: &str) -> String {
+    let input = input.trim().split("\n\n");
     let tiles: HashMap<&str, Tile> = input.map(tile_splitter).collect();
     //println!("Input: {:?}", &tiles["3371"]);
     let mut edge_matches: HashMap<Edge, Vec<(&str, EdgeDir)>> = HashMap::new();
@@ -476,4 +478,12 @@ pub fn run() -> String {
         num_hashes_not_seamonster
     );
     format!("TODO")
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

@@ -1,3 +1,7 @@
+const INPUT: &str = include_str!("input");
+
+const EXAMPLE_INPUT: &str = "TODO";
+
 use std::collections::HashMap;
 use std::ops::Range;
 
@@ -27,8 +31,8 @@ fn split_range_spec(in_string: &str) -> (&str, TwoRanges) {
     (pairs[0], (ranges.remove(0), ranges.remove(0)))
 }
 
-pub fn run() -> String {
-    let input: Vec<&str> = include_str!("input")
+pub fn process_input(input: &str) -> String {
+    let input: Vec<&str> = input
         .split("\n\n")
         .map(|a| a.trim())
         .collect();
@@ -96,4 +100,12 @@ pub fn run() -> String {
     }
     println!("Product of departures: {}", departures);
     format!("TODO")
+}
+
+pub fn run_example() -> String {
+    process_input(EXAMPLE_INPUT)
+}
+
+pub fn run() -> String {
+    process_input(INPUT)
 }

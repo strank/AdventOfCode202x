@@ -36,28 +36,78 @@ pub fn get_years() -> [usize; 2] {
     [2020, 2021]
 }
 
-/// Return an array of 26 run functions
+pub type RunFn = fn() -> String;
+
+#[derive(PartialEq, Copy, Clone)]
+pub struct AOCRunFns {
+    pub run: RunFn,
+    pub example: RunFn,
+}
+
+/// Return an array of 26 tuples of functions (run, run_example)
 /// (26 rather than 25 for clean 1-based indexing)
-pub fn get_days(year: usize) -> [Option<fn() -> String>; 26] {
-    let mut days: [Option<fn() -> String>; 26] = [None; 26];
+pub fn get_days(year: usize) -> [Option<AOCRunFns>; 26] {
+    let mut days: [Option<AOCRunFns>; 26] = [None; 26];
     match year {
         2020 => {
-            days[16] = Some(year2020day16::run);
-            days[17] = Some(year2020day17::run);
-            days[18] = Some(year2020day18::run);
-            days[19] = Some(year2020day19::run);
-            days[20] = Some(year2020day20::run);
-            days[21] = Some(year2020day21::run);
-            days[22] = Some(year2020day22::run);
-            days[23] = Some(year2020day23::run);
-            days[24] = Some(year2020day24::run);
-            days[25] = Some(year2020day25::run);
+            days[16] = Some(AOCRunFns {
+                run: year2020day16::run,
+                example: year2020day16::run_example,
+            });
+            days[17] = Some(AOCRunFns {
+                run: year2020day17::run,
+                example: year2020day17::run_example,
+            });
+            days[18] = Some(AOCRunFns {
+                run: year2020day18::run,
+                example: year2020day18::run_example,
+            });
+            days[19] = Some(AOCRunFns {
+                run: year2020day19::run,
+                example: year2020day19::run_example,
+            });
+            days[20] = Some(AOCRunFns {
+                run: year2020day20::run,
+                example: year2020day20::run_example,
+            });
+            days[21] = Some(AOCRunFns {
+                run: year2020day21::run,
+                example: year2020day21::run_example,
+            });
+            days[22] = Some(AOCRunFns {
+                run: year2020day22::run,
+                example: year2020day22::run_example,
+            });
+            days[23] = Some(AOCRunFns {
+                run: year2020day23::run,
+                example: year2020day23::run_example,
+            });
+            days[24] = Some(AOCRunFns {
+                run: year2020day24::run,
+                example: year2020day24::run_example,
+            });
+            days[25] = Some(AOCRunFns {
+                run: year2020day25::run,
+                example: year2020day25::run_example,
+            });
         }
         2021 => {
-            days[5] = Some(year2021day05::run);
-            days[6] = Some(year2021day06::run);
-            days[7] = Some(year2021day07::run);
-            days[8] = Some(year2021day08::run);
+            days[5] = Some(AOCRunFns {
+                run: year2021day05::run,
+                example: year2021day05::run_example,
+            });
+            days[6] = Some(AOCRunFns {
+                run: year2021day06::run,
+                example: year2021day06::run_example,
+            });
+            days[7] = Some(AOCRunFns {
+                run: year2021day07::run,
+                example: year2021day07::run_example,
+            });
+            days[8] = Some(AOCRunFns {
+                run: year2021day08::run,
+                example: year2021day08::run_example,
+            });
         }
         _ => {}
     }
