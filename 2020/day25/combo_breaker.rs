@@ -67,13 +67,13 @@ pub fn process_input(input: &str) -> String {
         .collect();
     //println!("Loop sizes: {:?}", &loop_sizes);
     // check that it's true:
-    for loop_s in &loop_sizes {
-        println!(
-            "transform subject number {} -> {}",
-            BASE,
-            transform_subject_number(7, *loop_s, MODULO)
-        );
-    }
+    // for loop_s in &loop_sizes {
+    //     println!(
+    //         "transform subject number {} -> {}",
+    //         BASE,
+    //         transform_subject_number(7, *loop_s, MODULO)
+    //     );
+    // }
     // calculate the encryption key
     format!(
         "Encryption key: {}",

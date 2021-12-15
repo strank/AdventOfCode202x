@@ -110,7 +110,7 @@ fn flip_tiles(lines: &[&str]) -> HashSet<HexCoord> {
 }
 
 fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
-    for day in 1..=100 {
+    for _day in 1..=100 {
         let mut tiles_to_flip: HashSet<HexCoord> = HashSet::new();
         let mut whites_black_neighbour_count: HashMap<HexCoord, usize> = HashMap::new();
         for tile in &black_tiles {
@@ -136,9 +136,9 @@ fn game_of_life(mut black_tiles: HashSet<HexCoord>) -> HashSet<HexCoord> {
                 black_tiles.insert(tile);
             }
         }
-        if day < 10 || day % 10 == 0 {
-            println!("Day {}: {}", day, black_tiles.len());
-        }
+        // if day < 10 || day % 10 == 0 {
+        //     println!("Day {}: {}", day, black_tiles.len());
+        // }
     }
     black_tiles
 }

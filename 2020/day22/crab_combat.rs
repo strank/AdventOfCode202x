@@ -134,9 +134,9 @@ pub fn process_input(input: &str) -> String {
     let players: Vec<Deck> = input.map(cards_splitter).collect();
     //println!("Input: {:?}", &players);
     let (winner_1, winning_deck_1) = play_combat(players.clone());
-    println!("Winning deck part 1: {:?}", &winning_deck_1);
+    //println!("Winning deck part 1: {:?}", &winning_deck_1);
     let (recursive_winner, winning_deck_2) = play_recursive_combat(players);
-    println!("Winning deck part 2: {:?}", &winning_deck_2);
+    //println!("Winning deck part 2: {:?}", &winning_deck_2);
     format!(
         "Part 1 Winner {} scores: {:?}\nPart 2 Winner {} scores: {:?}",
         winner_1 + 1,

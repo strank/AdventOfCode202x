@@ -466,23 +466,23 @@ pub fn process_input(input: &str) -> String {
         .iter()
         .filter_map(|(&k, &v)| if v == 2 { Some(k) } else { None })
         .collect();
-    println!("Corners: {:?}", corners);
+    //println!("Corners: {:?}", corners);
     let product_of_corners = corners
         .iter()
         .map(|&tid| tid.parse::<u64>().unwrap())
         .product::<u64>();
-    println!(
-        "{} Tiles and {} Outer Tiles",
-        tiles.len(),
-        outer_edge_freq.len()
-    );
+    // println!(
+    //     "{} Tiles and {} Outer Tiles",
+    //     tiles.len(),
+    //     outer_edge_freq.len()
+    // );
     // reconstruct image by starting from a corner and filling a matrix:
     let image = reconstruct_image(tiles, &edge_matches, corners[0]);
     let num_hashes = count_value(image.view(), 1);
     //println!("IMAGE (sum {})\n{:?}", num_hashes, image);
     // filter out monsters and count again:
     let monster = Tile::from_str_shape(SEA_MONSTER, "monster", (3, 20));
-    println!("the monster:\n{:?}", monster);
+    //println!("the monster:\n{:?}", monster);
     let num_hashes_not_seamonster = num_hashes - count_seamonster_hashes(image.view(), monster);
     format!(
         "Product of corners: {}\nNOT PART OF SEA MONSTERS sum: {}",

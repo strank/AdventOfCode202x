@@ -118,17 +118,17 @@ pub fn process_input(input: &str) -> String {
     // part 2: extend cups to 1 million, do 10 million moves
     // -> need a specialized structure, a linked-list in an array
     let mut circle = Circle::new(starting_cups, 1_000_000);
-    println!(
-        "Circle first 12: {:?} last 5: {:?}",
-        &circle.cw_neighbour[..12],
-        &circle.cw_neighbour[circle.max - 4..]
-    );
+    //println!(
+    //    "Circle first 12: {:?} last 5: {:?}",
+    //    &circle.cw_neighbour[..12],
+    //    &circle.cw_neighbour[circle.max - 4..]
+    //);
     circle.play_game();
-    println!(
-        "Circle first 12: {:?} last 5: {:?}",
-        &circle.cw_neighbour[..12],
-        &circle.cw_neighbour[circle.max - 4..]
-    );
+    // println!(
+    //     "Circle first 12: {:?} last 5: {:?}",
+    //     &circle.cw_neighbour[..12],
+    //     &circle.cw_neighbour[circle.max - 4..]
+    // );
     let a = circle.cw_neighbour[1];
     let b = circle.cw_neighbour[a];
     format!(
