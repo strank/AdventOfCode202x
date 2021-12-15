@@ -1,15 +1,25 @@
-/// https://adventofcode.com/2020/day/19
-/// parse ab strings based on a grammar that only uses the sequence and choice operators.
-/// This is probably meant to be done with just recursive descent parsing,
-/// but I would like to use it to implement a PEG parser with memoization,
-/// i.e. a packrat parser.
-/// (Maybe later also implement left-recursion like in this paper:
-/// https://web.cs.ucla.edu/~todd/research/pepm08.pdf
-/// this is also roughtly what's implemented in python's new peg parser.)
+//! https://adventofcode.com/2020/day/19
+//! parse ab strings based on a grammar that only uses the sequence and choice operators.
+//! This is probably meant to be done with just recursive descent parsing,
+//! but I would like to use it to implement a PEG parser with memoization,
+//! i.e. a packrat parser.
+//! (Maybe later also implement left-recursion like in this paper:
+//! https://web.cs.ucla.edu/~todd/research/pepm08.pdf
+//! this is also roughly what's implemented in python's new peg parser.)
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day19::run;
+//! assert!(run().contains("Number of matches: 147\nPart 2: 263 matches"));
+//! ```
 
 const INPUT: &str = include_str!("input");
 
-const EXAMPLE_INPUT: &str = "
+/// example answer 2, but use provided example input from part 2!
+/// ```
+/// use advent_of_code_202x::generated::year2020day19::run_example;
+/// assert!(run_example().contains("Number of matches: 3\nPart 2: 12 matches"));
+/// ```
+const _EXAMPLE_INPUT_1: &str = "
 0: 4 1 5
 1: 2 3 | 3 2
 2: 4 4 | 5 5
@@ -22,9 +32,9 @@ bababa
 abbbab
 aaabbb
 aaaabbb
-"; // --> answer 2
+";
 
-const _EXAMPLE_INPUT2: &str = "
+const EXAMPLE_INPUT: &str = "
 42: 9 14 | 10 1
 9: 14 27 | 1 26
 10: 23 14 | 28 1
@@ -192,7 +202,6 @@ pub fn process_input(input: &str) -> String {
         .iter()
         .filter(|&&msg| ParseRun::new(&rules, msg).parse("0"))
         .count();
-    println!("Number of matches: {}", matched_messages_count);
     for (rule, body) in PART2_MODIFICATION.trim().split('\n').map(rule_splitter) {
         rules.insert(rule, body);
     }
@@ -200,9 +209,12 @@ pub fn process_input(input: &str) -> String {
         .iter()
         .filter(|&&msg| ParseRun::new(&rules, msg).parse("0"))
         .collect();
-    println!("Part 2, matches: {:?}", matched_messages);
-    println!("Part 2, Number of matches: {}", matched_messages.len());
-    format!("TODO")
+    format!(
+        "Number of matches: {}\nPart 2: {} matches: {:?}",
+        matched_messages_count,
+        matched_messages.len(),
+        matched_messages
+    )
 }
 
 pub fn run_example() -> String {

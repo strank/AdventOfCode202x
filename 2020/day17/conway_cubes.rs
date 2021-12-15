@@ -1,6 +1,21 @@
+//! https://adventofcode.com/2020/day/17
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day17::run;
+//! assert!(run().contains("Active count 293\nActive count 4D 1816"));
+//! ```
+
 const INPUT: &str = include_str!("input");
 
-const EXAMPLE_INPUT: &str = "TODO";
+/// ```
+/// use advent_of_code_202x::generated::year2020day17::run_example;
+/// assert!(run_example().contains("Active count 112\nActive count 4D 848"));
+/// ```
+const EXAMPLE_INPUT: &str = "
+.#.
+..#
+###
+";
 
 use itertools::iproduct;
 
@@ -93,12 +108,7 @@ fn step4(matrix: &mut Matrix4) {
 }
 
 pub fn process_input(input: &str) -> String {
-    let input: Vec<&str> = input
-        .split('\n')
-        .map(|a| a.trim())
-        .collect();
-    println!("input:\n{:?}\n", input);
-
+    let input: Vec<&str> = input.split('\n').map(|a| a.trim()).collect();
     // need a three dimensional data structure
     // since there's only 6 rounds, only need max initial-dimensions + 12 + 2
     // (to allow neighbour access without checking bounds, not processing cells on the edge)
@@ -118,8 +128,7 @@ pub fn process_input(input: &str) -> String {
         .flatten()
         .map(|&b| if b { 1 } else { 0 })
         .sum();
-    println!("Active count {}", active_count);
-
+    // part 2:
     let mut matrix4: Matrix4 = [[[[false; MAX_W]; MAX_Z]; MAX_Y]; MAX_X];
     for (y, line) in input.iter().enumerate() {
         for (x, cell) in line.chars().enumerate() {
@@ -130,15 +139,17 @@ pub fn process_input(input: &str) -> String {
         step4(&mut matrix4);
     }
     // count active cells:
-    let active_count: u64 = matrix4
+    let active_count_4d: u64 = matrix4
         .iter()
         .flatten()
         .flatten()
         .flatten()
         .map(|&b| if b { 1 } else { 0 })
         .sum();
-    println!("Active count 4D {}", active_count);
-    format!("TODO")
+    format!(
+        "Active count {}\nActive count 4D {}",
+        active_count, active_count_4d
+    )
 
     // Better Ideas:
 

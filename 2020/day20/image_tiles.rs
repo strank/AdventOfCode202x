@@ -1,8 +1,26 @@
-/// https://adventofcode.com/2020/day/20
-/// Match image tiles based on their borders
+//! https://adventofcode.com/2020/day/20
+//! Match image tiles based on their borders
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day20::run;
+//! assert!(run().contains(
+//!     "Product of corners: 59187348943703\nNOT PART OF SEA MONSTERS sum: 1565"
+//! ));
+//! ```
 
 const INPUT: &str = include_str!("input");
 
+// example answer
+// 1951    2311    3079
+// 2729    1427    2473
+// 2971    1489    1171
+// multiply the IDs of the four corner tiles: 1951 * 3079 * 2971 * 1171 = 20899048083289.
+/// ```
+/// use advent_of_code_202x::generated::year2020day20::run_example;
+/// assert!(run_example().contains(
+///     "Product of corners: 20899048083289\nNOT PART OF SEA MONSTERS sum: 273"
+/// ));
+/// ```
 const EXAMPLE_INPUT: &str = "
 Tile 2311:
 ..##.#..#.
@@ -111,11 +129,7 @@ Tile 3079:
 ..#.###...
 ..#.......
 ..#.###...
-"; // --> answer
-   // 1951    2311    3079
-   // 2729    1427    2473
-   // 2971    1489    1171
-   // multiply the IDs of the four corner tiles: 1951 * 3079 * 2971 * 1171 = 20899048083289.
+";
 
 // PART 1 solved without representing the tiles, just focusing on edges:
 
@@ -284,7 +298,7 @@ fn reconstruct_image(
     corner: &str,
 ) -> Array2<u8> {
     let num_tiles = tiles.len();
-    let row_length: usize = 12;
+    let row_length: usize = (num_tiles as f64).sqrt() as usize;
     assert!(num_tiles == row_length * row_length);
     let mut tile_id = corner;
     let mut tile = tiles.remove(tile_id).unwrap();
@@ -453,13 +467,10 @@ pub fn process_input(input: &str) -> String {
         .filter_map(|(&k, &v)| if v == 2 { Some(k) } else { None })
         .collect();
     println!("Corners: {:?}", corners);
-    println!(
-        "Product of corners: {}",
-        corners
-            .iter()
-            .map(|&tid| tid.parse::<u64>().unwrap())
-            .product::<u64>()
-    );
+    let product_of_corners = corners
+        .iter()
+        .map(|&tid| tid.parse::<u64>().unwrap())
+        .product::<u64>();
     println!(
         "{} Tiles and {} Outer Tiles",
         tiles.len(),
@@ -473,11 +484,10 @@ pub fn process_input(input: &str) -> String {
     let monster = Tile::from_str_shape(SEA_MONSTER, "monster", (3, 20));
     println!("the monster:\n{:?}", monster);
     let num_hashes_not_seamonster = num_hashes - count_seamonster_hashes(image.view(), monster);
-    println!(
-        "NOT PART OF SEA MONSTERS sum: {}",
-        num_hashes_not_seamonster
-    );
-    format!("TODO")
+    format!(
+        "Product of corners: {}\nNOT PART OF SEA MONSTERS sum: {}",
+        product_of_corners, num_hashes_not_seamonster,
+    )
 }
 
 pub fn run_example() -> String {

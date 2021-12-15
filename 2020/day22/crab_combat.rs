@@ -1,12 +1,26 @@
-/// https://adventofcode.com/2020/day/22
-/// Card game with a crab
-
-/// both players draw their top card, and the player with the higher-valued card wins the round.
-/// The winner keeps both cards, placing them on the bottom of their own deck so that
-/// the winner's card is above the other card.
+//! https://adventofcode.com/2020/day/22
+//! Card game with a crab
+//!
+//! both players draw their top card, and the player with the higher-valued card wins the round.
+//! The winner keeps both cards, placing them on the bottom of their own deck so that
+//! the winner's card is above the other card.
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day22::run;
+//! assert!(run().contains(
+//!     "Part 1 Winner 1 scores: 32598\nPart 2 Winner 1 scores: 35836"
+//! ));
+//! ```
 
 const INPUT: &str = include_str!("input");
 
+/// example answer 306
+/// ```
+/// use advent_of_code_202x::generated::year2020day22::run_example;
+/// assert!(run_example().contains(
+///     "Part 1 Winner 2 scores: 306\nPart 2 Winner 2 scores: 291"
+/// ));
+/// ```
 const EXAMPLE_INPUT: &str = "
 Player 1:
 9
@@ -21,18 +35,7 @@ Player 2:
 4
 7
 10
-"; // --> answer
-   //    3 * 10
-   // +  2 *  9
-   // + 10 *  8
-   // +  6 *  7
-   // +  8 *  6
-   // +  5 *  5
-   // +  9 *  4
-   // +  4 *  3
-   // +  7 *  2
-   // +  1 *  1
-   // = 306
+";
 
 use std::collections::{HashSet, VecDeque};
 
@@ -135,7 +138,7 @@ pub fn process_input(input: &str) -> String {
     let (recursive_winner, winning_deck_2) = play_recursive_combat(players);
     println!("Winning deck part 2: {:?}", &winning_deck_2);
     format!(
-        "Part one Winner {} scores: {:?}\nPart two Winner {} scores: {:?}",
+        "Part 1 Winner {} scores: {:?}\nPart 2 Winner {} scores: {:?}",
         winner_1 + 1,
         calc_score(winning_deck_1),
         recursive_winner + 1,

@@ -43,11 +43,7 @@ fn str_to_usize(a_str: &str) -> usize {
 }
 
 pub fn process_input(input: &str) -> String {
-    let timers: Vec<_> = input
-        .trim()
-        .split(',')
-        .map(str_to_usize)
-        .collect();
+    let timers: Vec<_> = input.trim().split(',').map(str_to_usize).collect();
     //println!("timers:\n{:?}", timers);
     let sim_steps_1: usize = 80;
     let num_fish_1 = count_after_sim_steps(&timers, sim_steps_1);

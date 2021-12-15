@@ -1,6 +1,30 @@
+//! https://adventofcode.com/2020/day/17
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day16::run;
+//! assert!(run().contains("Error rate: 23954\nProduct of departures: 453459307723"));
+//! ```
+
 const INPUT: &str = include_str!("input");
 
-const EXAMPLE_INPUT: &str = "TODO";
+/// ```
+/// use advent_of_code_202x::generated::year2020day16::run_example;
+/// assert!(run_example().contains("Error rate: 71\nProduct of departures: 1"));
+/// ```
+const EXAMPLE_INPUT: &str = "
+class: 1-3 or 5-7
+row: 6-11 or 33-44
+seat: 13-40 or 45-50
+
+your ticket:
+7,1,14
+
+nearby tickets:
+7,3,47
+40,4,50
+55,2,20
+38,6,12
+";
 
 use std::collections::HashMap;
 use std::ops::Range;
@@ -32,16 +56,13 @@ fn split_range_spec(in_string: &str) -> (&str, TwoRanges) {
 }
 
 pub fn process_input(input: &str) -> String {
-    let input: Vec<&str> = input
-        .split("\n\n")
-        .map(|a| a.trim())
-        .collect();
+    let input: Vec<&str> = input.split("\n\n").map(|a| a.trim()).collect();
     let field_specs: HashMap<&str, TwoRanges> =
         input[0].split('\n').map(split_range_spec).collect();
     let my_ticket = split_int(input[1].split('\n').last().unwrap().trim());
     let nearby_tickets: Vec<Ticket> = input[2].trim().split('\n').skip(1).map(split_int).collect();
-    println!("field_specs:\n{:?}\n", field_specs);
-    println!("my_ticket:\n{:?}\n", my_ticket);
+    //println!("field_specs:\n{:?}\n", field_specs);
+    //println!("my_ticket:\n{:?}\n", my_ticket);
     //println!("nearby_tickets:\n{:?}\n", nearby_tickets);
     // Check all tickets for impossible fields and keep only valid tickets:
     let mut ticket_s_err_rate = 0;
@@ -61,7 +82,6 @@ pub fn process_input(input: &str) -> String {
             valid_tickets.push(ticket);
         }
     }
-    println!("ticket scanning error rate: {}", ticket_s_err_rate);
     // create a list of options for each field, initally all field names
     let mut field_options: Vec<Vec<&str>> = (0..my_ticket.len())
         .map(|_| field_specs.keys().copied().collect())
@@ -76,10 +96,10 @@ pub fn process_input(input: &str) -> String {
         }
     }
     //println!("field options after first round: {:?}", field_options);
-    println!(
-        "field options lengths summed: {}",
-        field_options.iter().map(|l| l.len()).sum::<usize>()
-    );
+    //println!(
+    //    "field options lengths summed: {}",
+    //    field_options.iter().map(|l| l.len()).sum::<usize>()
+    //);
     // then loop checking for those with only one candidate until all resolved
     // when a field starting with "departure" is found, multiply it for the part2 answer
     let mut departures: u64 = 1;
@@ -87,7 +107,7 @@ pub fn process_input(input: &str) -> String {
         let resolved_i = field_options.iter().position(|fo| fo.len() == 1);
         if let Some(index) = resolved_i {
             let resolved_field = field_options[index][0];
-            println!("My {}: {}", resolved_field, my_ticket[index]);
+            //println!("My {}: {}", resolved_field, my_ticket[index]);
             if resolved_field.starts_with("departure") {
                 departures *= u64::from(my_ticket[index]);
             }
@@ -98,8 +118,10 @@ pub fn process_input(input: &str) -> String {
             break;
         }
     }
-    println!("Product of departures: {}", departures);
-    format!("TODO")
+    format!(
+        "Error rate: {}\nProduct of departures: {}",
+        ticket_s_err_rate, departures
+    )
 }
 
 pub fn run_example() -> String {

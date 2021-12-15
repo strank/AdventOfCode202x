@@ -3,11 +3,24 @@
 //!
 //! part 1 implemented directly by holding the cup numbers in a vec
 //! part 2 needed a more efficient representation: neighbour links
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day23::run;
+//! assert!(run().contains(
+//!     "Part 1 final cups: 264518937\nProduct of 1-neighbours: 178513 * 119170 = 21273394210"
+//! ));
+//! ```
 
 const INPUT: &str = "614752839";
 
+/// example answer after 100 moves: (1) 67384529
+/// ```
+/// use advent_of_code_202x::generated::year2020day23::run_example;
+/// assert!(run_example().contains(
+///     "Part 1 final cups: 167384529\nProduct of 1-neighbours: 934001 * 159792 = 149245887792"
+/// ));
+/// ```
 const EXAMPLE_INPUT: &str = "389125467";
-// --> answer after 100 moves: (1) 67384529
 
 type Cups = Vec<usize>;
 
@@ -119,8 +132,12 @@ pub fn process_input(input: &str) -> String {
     let a = circle.cw_neighbour[1];
     let b = circle.cw_neighbour[a];
     format!(
-        "Part one final cups: {:?}\nProduct of 1-neighbours: {} * {} = {}",
-        &part1_cups,
+        "Part 1 final cups: {}\nProduct of 1-neighbours: {} * {} = {}",
+        &part1_cups
+            .iter()
+            .map(|n| n.to_string())
+            .collect::<Vec<String>>()
+            .join(""),
         a,
         b,
         a as u64 * b as u64

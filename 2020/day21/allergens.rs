@@ -1,16 +1,30 @@
-/// https://adventofcode.com/2020/day/21
-/// Identify allergens in unknown language
+//! https://adventofcode.com/2020/day/21
+//! Identify allergens in unknown language
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day21::run;
+//! assert!(run().contains(
+//!     "Safe ingredient count: 2556\nCanonical dangerous: vcckp,hjz,nhvprqb,jhtfzk,mgkhhc,qbgbmc,bzcrknb,zmh"
+//! ));
+//! ```
 
 const INPUT: &str = include_str!("input");
 
+/// example answer
+/// part1: kfcds, nhms, sbzzf, or trh cannot contain an allergen
+/// they appear 5 times in total
+/// ```
+/// use advent_of_code_202x::generated::year2020day21::run_example;
+/// assert!(run_example().contains(
+///     "Safe ingredient count: 5\nCanonical dangerous: mxmxvkd,sqjhc,fvjkl"
+/// ));
+/// ```
 const EXAMPLE_INPUT: &str = "
 mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
 trh fvjkl sbzzf mxmxvkd (contains dairy)
 sqjhc fvjkl (contains soy)
 sqjhc mxmxvkd sbzzf (contains fish)
-"; // --> answer
-   // part1: kfcds, nhms, sbzzf, or trh cannot contain an allergen
-   // they appear 5 times in total
+";
 
 use std::collections::{HashMap, HashSet};
 
@@ -47,15 +61,15 @@ pub fn process_input(input: &str) -> String {
             }
         }
     }
-    println!(
-        "Ingr counts:\n{:?}\nAllergen options:\n{:?}",
-        &ingr_counts, &allergen_options
-    );
+    //println!(
+    //    "Ingr counts:\n{:?}\nAllergen options:\n{:?}",
+    //    &ingr_counts, &allergen_options
+    //);
     let mut possible_allergens: HashSet<&&str> = HashSet::new();
     allergen_options
         .values()
         .for_each(|hs| possible_allergens.extend(hs));
-    println!("Possible allergens:\n{:?}", possible_allergens);
+    //println!("Possible allergens:\n{:?}", possible_allergens);
     let safe_ingr_count: i32 = ingr_counts
         .iter()
         .filter_map(|(ing, &count)| {
@@ -66,7 +80,6 @@ pub fn process_input(input: &str) -> String {
             }
         })
         .sum();
-    println!("Safe ingredient count: {}", safe_ingr_count);
     let mut allergen_translations: HashMap<&str, &str> = HashMap::new();
     loop {
         let allergens_found: Vec<_> = allergen_options
@@ -89,7 +102,7 @@ pub fn process_input(input: &str) -> String {
             allergen_translations.insert(aller, trans);
         }
     }
-    println!("Allergen translations:\n{:?}", &allergen_translations);
+    //println!("Allergen translations:\n{:?}", &allergen_translations);
     // sort alphabetically
     let mut allergens: Vec<_> = allergen_translations.keys().collect();
     allergens.sort();
@@ -97,8 +110,11 @@ pub fn process_input(input: &str) -> String {
         .iter()
         .map(|&&a| allergen_translations[a])
         .collect();
-    println!("{}", translations.join(","));
-    format!("TODO")
+    format!(
+        "Safe ingredient count: {}\nCanonical dangerous: {}",
+        safe_ingr_count,
+        translations.join(","),
+    )
 }
 
 pub fn run_example() -> String {

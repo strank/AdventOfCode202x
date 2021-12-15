@@ -1,6 +1,11 @@
-/// https://adventofcode.com/2020/day/18
-/// parse numeric expression with parenthesis, plus and times.
-/// the operators have the same precedence so evaluate left to right!
+//! https://adventofcode.com/2020/day/18
+//! parse numeric expression with parenthesis, plus and times.
+//! the operators have the same precedence so evaluate left to right!
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day18::run;
+//! assert!(run().contains("Sum part 1: 45283905029161\nSum part 2: 216975281211165"));
+//! ```
 
 const INPUT: &str = include_str!("input");
 
@@ -8,6 +13,10 @@ const INPUT: &str = include_str!("input");
 /// 5 + (8 * 3 + 9 + 3 * 4 * 3) becomes 437.
 /// 5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4)) becomes 12240.
 /// ((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2 becomes 13632.
+/// ```
+/// use advent_of_code_202x::generated::year2020day18::run_example;
+/// assert!(run_example().contains("Sum part 1: 26351\nSum part 2: 693907"));
+/// ```
 const EXAMPLE_INPUT: &str = "
 2 * 3 + (4 * 5)
 5 + (8 * 3 + 9 + 3 * 4 * 3)
@@ -117,12 +126,13 @@ pub fn process_input(input: &str) -> String {
         parsed_exprs2.push(parse_expr_op_prec(&mut ts.into_iter().peekable()));
         //        parsed_exprs2.push(parse_primary(&mut ts.into_iter().peekable()));
     }
-    let evaluated_sum: u64 = parsed_exprs.iter().map(eval_expr).sum();
-    println!("Sum of expressions, part 1: {}", evaluated_sum);
+    let evaluated_sum_1: u64 = parsed_exprs.iter().map(eval_expr).sum();
     //println!("Parsed: {:?}", parsed_exprs2);
-    let evaluated_sum: u64 = parsed_exprs2.iter().map(eval_expr).sum();
-    println!("Sum of expressions, part 2: {}", evaluated_sum);
-    format!("TODO")
+    let evaluated_sum_2: u64 = parsed_exprs2.iter().map(eval_expr).sum();
+    format!(
+        "Sum part 1: {}\nSum part 2: {}",
+        evaluated_sum_1, evaluated_sum_2,
+    )
 }
 
 pub fn run_example() -> String {

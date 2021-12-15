@@ -7,9 +7,18 @@
 //! 7 and 20201227 are prime
 //!
 //! We need a "discrete logarithm" to calculate the loopsizes
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day25::run;
+//! assert!(run().contains("Encryption key: 2947148"));
+//! ```
 
 const INPUT: &str = include_str!("input");
 
+/// ```
+/// use advent_of_code_202x::generated::year2020day25::run_example;
+/// assert!(run_example().contains("Encryption key: 14897079"));
+/// ```
 const EXAMPLE_INPUT: &str = "
 5764801
 17807724
@@ -67,7 +76,7 @@ pub fn process_input(input: &str) -> String {
     }
     // calculate the encryption key
     format!(
-        "Encryption key, part 1: {}",
+        "Encryption key: {}",
         transform_subject_number(public_keys[0], loop_sizes[1], MODULO)
     )
 }

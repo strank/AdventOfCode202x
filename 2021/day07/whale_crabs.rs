@@ -77,11 +77,7 @@ fn str_to_usize(a_str: &str) -> usize {
 }
 
 pub fn process_input(input: &str) -> String {
-    let mut positions: Vec<_> = input
-        .trim()
-        .split(',')
-        .map(str_to_usize)
-        .collect();
+    let mut positions: Vec<_> = input.trim().split(',').map(str_to_usize).collect();
     positions.sort_unstable();
     //println!("positions:\n{:?}", positions);
     let median_position = find_median(&positions);

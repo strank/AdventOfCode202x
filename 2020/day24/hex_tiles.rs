@@ -14,9 +14,19 @@
 //!    +z
 //!
 //! so going east, for example, increases x, but decreases y (z stays the same)
+//!
+//! ```
+//! use advent_of_code_202x::generated::year2020day24::run;
+//! assert!(run().contains("Num black tiles, part 1: 346\nNum black tiles, part 2: 3802"));
+//! ```
 
 const INPUT: &str = include_str!("input");
 
+/// example answer 10 tiles black
+/// ```
+/// use advent_of_code_202x::generated::year2020day24::run_example;
+/// assert!(run_example().contains("Num black tiles, part 1: 10\nNum black tiles, part 2: 2208"));
+/// ```
 const EXAMPLE_INPUT: &str = "
 sesenwnenenewseeswwswswwnenewsewsw
 neeenesenwnwwswnenewnwwsewnenwseswesw
@@ -39,7 +49,6 @@ eneswnwswnwsenenwnwnwwseeswneewsenese
 neswnwewnwnwseenwseesewsenwsweewe
 wseweeenwnesenwwwswnew
 ";
-// --> answer 10 tiles black
 
 use phf::phf_map;
 use std::collections::{HashMap, HashSet};

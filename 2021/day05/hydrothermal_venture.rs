@@ -111,11 +111,7 @@ fn line_splitter(line: &str) -> LineSpec {
 }
 
 pub fn process_input(input: &str) -> String {
-    let line_specs: Vec<_> = input
-        .trim()
-        .split('\n')
-        .map(line_splitter)
-        .collect();
+    let line_specs: Vec<_> = input.trim().split('\n').map(line_splitter).collect();
     //println!("lines:\n{:?}", line_specs);
     let points_used_1 = calc_points_use_count(&line_specs, false);
     let points_used_2 = calc_points_use_count(&line_specs, true);
