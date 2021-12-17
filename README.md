@@ -38,7 +38,25 @@ Run only a specific one by adding any part of its name, e.g. `21day05`.
 
 ## Python-based solutions
 
-TODO
+Run any puzzle by directly running the python file:
+
+    python 2021/day04/bingo_squid.py
+
+Add an `x` argument to use the example input of the puzzle instead of the full input.
+
+Run all tests (doctests only, it will skip benchmarks) checking that the answers are still correct:
+
+    pytest
+
+Run a specific one by using any part of its name with the `-k` option, e.g. `-k 2021day04`.
+
+Get code improvement hints / linting with `pylint` (should happen automatically in vscode) and format code with Alt-Shift-F in vscode (currently using autopep8).
+
+Run all benchmarks, using pytest-benchmark (this will skip normal tests, but it might take some time):
+
+    pytest --benchmark-only
+
+Run only a specific with `-k` as above, e.g. `-k 21day04`.
 
 ## GDScript-based solutions
 
