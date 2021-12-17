@@ -21,3 +21,4 @@ __pycache__/
 
 # Testing
 .pytest_cache/
+.benchmarks/

@@ -1,0 +1,6 @@
+[tool.autopep8]
+max_line_length = 100
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --benchmark-skip"
+filterwarnings = "ignore:Using or importing the ABCs:DeprecationWarning"

@@ -1,18 +1,41 @@
 """
+https://adventofcode.com/2021/day/1
+
+>>> main()
+no of increases:  1766
+no of sliding-window increases:  1797
+
+>>> main(EXAMPLE_INPUT)
+no of increases:  7
+no of sliding-window increases:  5
 """
+
 from pathlib import Path
 import sys
 import itertools
 
+INPUT = (Path(__file__).parent / "input").read_text()
 
-def yield_ints():
-    input_path = Path(__file__).parent / "input"
-    with input_path.open() as input_file:
-        for line in input_file:
-            line = line.strip()
-            if not line:
-                continue
-            yield int(line)
+EXAMPLE_INPUT = """
+199
+200
+208
+210
+200
+207
+240
+269
+260
+263
+"""
+
+
+def yield_ints(puzzle_input):
+    for line in puzzle_input.strip().split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        yield int(line)
 
 
 def process_measurements(input_ints):
@@ -31,12 +54,12 @@ def sliding_window(iterable, n=2):
     iterables = itertools.tee(iterable, n)
     for iterable, num_skipped in zip(iterables, itertools.count()):
         for _ in range(num_skipped):
-            next(iterable, None)    
+            next(iterable, None)
     return zip(*iterables)
 
 
-def main():
-    input_ints = list(yield_ints())
+def main(puzzle_input=INPUT):
+    input_ints = list(yield_ints(puzzle_input))
     increases = process_measurements(input_ints)
     print("no of increases: ", increases)
     window_sums = [sum(window) for window in sliding_window(input_ints, 3)]
@@ -44,7 +67,5 @@ def main():
     print("no of sliding-window increases: ", increases)
 
 
-
-
 if __name__ == "__main__":
-    main()
+    main(INPUT if 'x' not in sys.argv else EXAMPLE_INPUT)
