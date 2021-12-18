@@ -31,6 +31,7 @@ EXAMPLE_INPUT = """
 
 
 def yield_ints(puzzle_input):
+    """Return one integer per line in the input."""
     for line in puzzle_input.strip().split('\n'):
         line = line.strip()
         if not line:
@@ -39,8 +40,7 @@ def yield_ints(puzzle_input):
 
 
 def process_measurements(input_ints):
-    """
-    """
+    """Return count of increases in the sequence of values."""
     count = 0
     prev_measurement = sys.maxsize
     for measurement in input_ints:
@@ -50,15 +50,17 @@ def process_measurements(input_ints):
     return count
 
 
-def sliding_window(iterable, n=2):
-    iterables = itertools.tee(iterable, n)
-    for iterable, num_skipped in zip(iterables, itertools.count()):
+def sliding_window(iterable, window_size=2):
+    """Return sliding windows of size `window_size` from `iterable`, itertools recipe."""
+    iterables = itertools.tee(iterable, window_size)
+    for ze_iterable, num_skipped in zip(iterables, itertools.count()):
         for _ in range(num_skipped):
-            next(iterable, None)
+            next(ze_iterable, None)
     return zip(*iterables)
 
 
 def main(puzzle_input=INPUT):
+    """Find solutions to both parts of the puzzle based on puzzle_input."""
     input_ints = list(yield_ints(puzzle_input))
     increases = process_measurements(input_ints)
     print("no of increases: ", increases)

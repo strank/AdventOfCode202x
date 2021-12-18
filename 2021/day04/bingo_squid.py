@@ -12,7 +12,6 @@ Losing Board Score: 1924
 
 from pathlib import Path
 import sys
-import itertools
 import numpy as np
 
 INPUT = (Path(__file__).parent / "input").read_text()
@@ -41,6 +40,7 @@ EXAMPLE_INPUT = """
 
 
 def yield_lines(puzzle_input):
+    """Yield all lines one by one."""
     for line in puzzle_input.strip().split('\n'):
         line = line.strip()
         # if not line:
@@ -49,6 +49,7 @@ def yield_lines(puzzle_input):
 
 
 def parse_boards(lines):
+    """Return a list of numpy arrays representing the boards.""" 
     boards = []
     current_lines = []
     for line in lines:
@@ -63,12 +64,12 @@ def parse_boards(lines):
 
 
 def call_bingo(boards, calls_iter):
+    """Return the winning and losing boards as triples (board, board_state, last_call)."""
     board_states = []
     for board in boards:
         # board state tracks called numbers, set to 0 when called
         board_states.append(np.ones_like(board))
     winning = losing = None
-    bingos = len(boards)
     for call in calls_iter:
         win_indices = []
         for index, (board, board_state) in enumerate(zip(boards, board_states)):
@@ -87,16 +88,18 @@ def call_bingo(boards, calls_iter):
 
 
 def is_bingo(board):
-    '''Check if any row or column is all 0s'''
+    """Return whether any row or column is all 0s."""
     for row in board:
         if np.all(row == 0):
             return True
     for col in board.T:
         if np.all(col == 0):
             return True
+    return False
 
 
 def main(puzzle_input=INPUT):
+    """Find solutions to both parts of the puzzle based on puzzle_input."""
     line_iter = yield_lines(puzzle_input)
     calls_iter = (int(x) for x in next(line_iter).split(','))
     next(line_iter)

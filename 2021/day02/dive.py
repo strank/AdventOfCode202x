@@ -26,6 +26,7 @@ forward 2
 
 
 def yield_dirs(puzzle_input):
+    """Yield a tuple of direction as single character and amount as int per line in input."""
     for line in puzzle_input.strip().split('\n'):
         line = line.strip()
         if not line:
@@ -35,8 +36,7 @@ def yield_dirs(puzzle_input):
 
 
 def process_commands(input_commands):
-    """
-    """
+    """Return the position and depth after procesing the `input_commands`."""
     pos = depth = 0
     for cmd_dir, cmd_val in input_commands:
         if cmd_dir == 'f':
@@ -49,8 +49,7 @@ def process_commands(input_commands):
 
 
 def process_commands_updated(input_commands):
-    """
-    """
+    """Return the position and depth after procesing the `input_commands`."""
     pos = depth = aim = 0
     for cmd_dir, cmd_val in input_commands:
         if cmd_dir == 'f':
@@ -64,6 +63,7 @@ def process_commands_updated(input_commands):
 
 
 def main(puzzle_input=INPUT):
+    """Find solutions to both parts of the puzzle based on puzzle_input."""
     input_commands = list(yield_dirs(puzzle_input))
     position, depth = process_commands(input_commands)
     print(f"simple position {position} depth {depth} product {position * depth}")
