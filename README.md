@@ -48,7 +48,7 @@ Run all tests (doctests only, it will skip benchmarks) checking that the answers
 
     pytest
 
-Run a specific one by using any part of its name with the `-k` option, e.g. `-k 2021day04`.
+Run a specific one by using parts of its name with the `-k` option, e.g. `-k "2021 and day04"` (pytest is not happy with path separators).
 
 Get code improvement hints / linting with `pylint` (should happen automatically in vscode) and format code with Alt-Shift-F in vscode (currently using autopep8).
 
