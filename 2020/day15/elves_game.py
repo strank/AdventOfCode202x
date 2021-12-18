@@ -1,24 +1,35 @@
 """
-"""
-from pathlib import Path
-import itertools
-import functools
-import re
-import collections
-import math
+https://adventofcode.com/2020/day/15
 
-INPUT = [int(x) for x in "6,13,1,15,2,0".split(",")]
+>>> main()
+Last spoken at turn 2020: 1194
+Last spoken at turn 30000000: 48710
+
+>>> main(EXAMPLE_INPUT)
+Last spoken at turn 2020: 436
+Last spoken at turn 30000000: 175594
+"""
+
+import sys
+import collections
+
+INPUT = "6,13,1,15,2,0"
+
+EXAMPLE_INPUT = "0,3,6"
+
 MAX1 = 2020
 MAX2 = 30000000
 
 
-def main():
+def main(puzzle_input=INPUT):
+    """Find solutions to both parts of the puzzle based on puzzle_input."""
+    input_list = [int(x) for x in puzzle_input.split(",")]
     history = collections.defaultdict(int)
-    last = INPUT[0]
-    for turn, num in enumerate(INPUT):
+    last = input_list[0]
+    for turn, num in enumerate(input_list):
         history[last] = turn
         last = num
-    for turn in range(len(INPUT), MAX1):
+    for turn in range(len(input_list), MAX1):
         stored_turn = history[last]
         history[last] = turn
         last = 0 if stored_turn == 0 else turn - stored_turn
@@ -31,4 +42,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(INPUT if 'x' not in sys.argv else EXAMPLE_INPUT)

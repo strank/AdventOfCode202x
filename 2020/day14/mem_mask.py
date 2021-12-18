@@ -1,26 +1,46 @@
 """
+https://adventofcode.com/2020/day/14
+
+>>> main()
+sum of memory:  7440382076205
+sum of memory:  4200656704538
+
+>>> main(EXAMPLE_INPUT)
+sum of memory:  165
+sum of memory:  208
 """
+
 from pathlib import Path
-import itertools
-import functools
-import re
-import collections
-import math
+import sys
+
+INPUT = (Path(__file__).parent / "input").read_text()
+
+EXAMPLE_INPUT = """
+mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+mem[8] = 11
+mem[7] = 101
+mem[8] = 0
+"""
+
+EXAMPLE_INPUT_PART_2 = """
+mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1
+"""
 
 
-def yield_lines():
-    input_path = Path(__file__).parent / "input"
-    with input_path.open() as input_file:
-        for line in input_file:
-            line = line.strip()
-            if not line:
-                continue
-            yield line
+def yield_lines(puzzle_input):
+    """Yield all non-empty lines one by one."""
+    for line in puzzle_input.strip().split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        yield line
 
 
 def process_memory(input_lines):
-    """
-    """
+    """Return memory after processing `input_lines`."""
     mem = {}
     or_mask = and_mask = 1
     for line in input_lines:
@@ -37,6 +57,7 @@ def process_memory(input_lines):
 
 
 def gen_floatings(mask):
+    """Yield all possible floating bit versions of `mask`."""
     x_index = mask.find("X")
     if x_index == -1:
         yield mask
@@ -44,9 +65,9 @@ def gen_floatings(mask):
         yield from gen_floatings(mask[:x_index] + "0" + mask[x_index + 1:])
         yield from gen_floatings(mask[:x_index] + "1" + mask[x_index + 1:])
 
+
 def process_memory_floating(input_lines):
-    """
-    """
+    """Return memory after processing `input_lines`."""
     mem = {}
     or_mask = 0
     and_masks = or_masks = []
@@ -67,13 +88,16 @@ def process_memory_floating(input_lines):
     return mem
 
 
-def main():
-    input_list = list(yield_lines())
+def main(puzzle_input=INPUT):
+    """Find solutions to both parts of the puzzle based on puzzle_input."""
+    input_list = list(yield_lines(puzzle_input))
     memory = process_memory(input_list)
     print("sum of memory: ", sum(memory.values()))
+    if puzzle_input == EXAMPLE_INPUT:  # special case with different example for part 2
+        input_list = list(yield_lines(EXAMPLE_INPUT_PART_2))
     memory = process_memory_floating(input_list)
     print("sum of memory: ", sum(memory.values()))
 
 
 if __name__ == "__main__":
-    main()
+    main(INPUT if 'x' not in sys.argv else EXAMPLE_INPUT)

@@ -10,9 +10,8 @@ import pytest
 
 def yield_py_files():
     """Yield all .py file paths in year subdirs."""
-    # TODO: for now just do year 2021, later replace with 202?
     # Note: searching relative to project root ".":
-    for entry in sorted(Path(".").glob("2021/**/*.py")):
+    for entry in sorted(Path(".").glob("202?/**/*.py")):
         yield entry
 
 

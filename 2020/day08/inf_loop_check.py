@@ -1,50 +1,71 @@
 """
+https://adventofcode.com/2020/day/8
+
 Detect infinite loop and track value of acc
+
+>>> main()
+ACC value:  1654
+FIXED ACC value:  833
+
+>>> main(EXAMPLE_INPUT)
+ACC value:  5
+FIXED ACC value:  8
 """
+
 from pathlib import Path
-import itertools
-import functools
-import re
+import sys
 import collections
 
+INPUT = (Path(__file__).parent / "input").read_text()
 
-def parse_program():
-    """
-    return program as list of (instr, value)
-    """
-    input_path = Path(__file__).parent / "input"
+EXAMPLE_INPUT = """
+nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+"""
+
+
+def parse_program(puzzle_input):
+    """Return program as list of (instr, value) tuples."""
     program = []
-    with input_path.open() as input_file:
-        for line in input_file:
-            line = line.strip()
-            if not line:
-                continue
-            print(line, line.split())
-            opcode, value = line.split()
-            program.append((opcode, int(value)))
+    for line in puzzle_input.strip().split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        #print(line, line.split())
+        opcode, value = line.split()
+        program.append((opcode, int(value)))
     return program
-    
+
 
 def get_acc_value(program):
+    """Return value of acc."""
     acc = 0
     visited = set()
-    ip = 0
+    i_p = 0
     while True:
-        if ip > len(program):
+        if i_p > len(program):
             assert False
-        if ip in visited or ip == len(program):
+        if i_p in visited or i_p == len(program):
             return acc
-        visited.add(ip)
-        opcode, value = program[ip]
+        visited.add(i_p)
+        opcode, value = program[i_p]
         if opcode == "jmp":
-            ip += value
+            i_p += value
         else:
-            ip += 1
+            i_p += 1
             if opcode == "acc":
                 acc += value
 
 
 def origins_for(index, backwards_map):
+    """Return set of reachable origins."""
     directly_reachable_from = backwards_map[index]
     indirectly_reachable_from = set()
     for new_index in directly_reachable_from:
@@ -53,6 +74,7 @@ def origins_for(index, backwards_map):
 
 
 def fix_program(program):
+    """Return `program` fixed."""
     backwards_map = collections.defaultdict(set)
     fixed_backwards_map = collections.defaultdict(set)
     for index, (opcode, value) in enumerate(program):
@@ -67,35 +89,36 @@ def fix_program(program):
             fixed_backwards_map[index + 1].add(index)
     # recursively fill set of indices that can reach the end:
     from_back = origins_for(len(program), backwards_map)
-    print("ORIGINS for program end: ", from_back)
+    #print("ORIGINS for program end: ", from_back)
     # go forward and change if any instruction could reach the from_back set
-    ip = 0
+    i_p = 0
     visited = set()
     while True:
-        if ip > len(program):
+        if i_p > len(program):
             assert False
-        if ip in visited or ip == len(program):
+        if i_p in visited or i_p == len(program):
             break
-        visited.add(ip)
-        opcode, value = program[ip]
+        visited.add(i_p)
+        opcode, value = program[i_p]
         if opcode == "jmp":
             # check if fix can work here:
-            if (ip + 1) in from_back:
-                program[ip] = ("nop", value) 
+            if i_p + 1 in from_back:
+                program[i_p] = ("nop", value)
                 break
-            ip += value
+            i_p += value
         else:
             if opcode == "nop":
                 # check if fix can work here:
-                if (ip + value) in from_back:
-                    program[ip] = ("jmp", value) 
+                if i_p + value in from_back:
+                    program[i_p] = ("jmp", value)
                     break
-            ip += 1
+            i_p += 1
     return program
 
 
-def main():
-    program = parse_program()
+def main(puzzle_input=INPUT):
+    """Find solutions to both parts of the puzzle based on puzzle_input."""
+    program = parse_program(puzzle_input)
     acc_value = get_acc_value(program)
     print("ACC value: ", acc_value)
     program = fix_program(program)
@@ -103,4 +126,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(INPUT if 'x' not in sys.argv else EXAMPLE_INPUT)

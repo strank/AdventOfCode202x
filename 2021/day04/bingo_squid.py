@@ -42,14 +42,11 @@ EXAMPLE_INPUT = """
 def yield_lines(puzzle_input):
     """Yield all lines one by one."""
     for line in puzzle_input.strip().split('\n'):
-        line = line.strip()
-        # if not line:
-        #    continue
-        yield line
+        yield line.strip()
 
 
 def parse_boards(lines):
-    """Return a list of numpy arrays representing the boards.""" 
+    """Return a list of numpy arrays representing the boards."""
     boards = []
     current_lines = []
     for line in lines:
@@ -58,7 +55,7 @@ def parse_boards(lines):
         else:
             boards.append(np.array(current_lines))
             current_lines = []
-    if current_lines: # final board might not be followed by an empty line
+    if current_lines:  # final board might not be followed by an empty line
         boards.append(np.array(current_lines))
     return boards
 
@@ -105,13 +102,13 @@ def main(puzzle_input=INPUT):
     next(line_iter)
     boards = parse_boards(line_iter)
     (wboard, wstate, wcall), (lboard, lstate, lcall) = call_bingo(boards, calls_iter)
-    #print(wboard)
-    #print(wstate)
-    #print(wcall)
+    # print(wboard)
+    # print(wstate)
+    # print(wcall)
     print(f"Winning Board Score: {np.sum(wboard * wstate) * wcall}")
-    #print(lboard)
-    #print(lstate)
-    #print(lcall)
+    # print(lboard)
+    # print(lstate)
+    # print(lcall)
     print(f"Losing Board Score: {np.sum(lboard * lstate) * lcall}")
 
 

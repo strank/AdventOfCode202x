@@ -1,29 +1,44 @@
 """
+https://adventofcode.com/2020/day/12
+
+>>> main()
+Manhattan distance of final pos:  1533
+Manhattan distance of final pos with waypoint:  25235
+
+>>> main(EXAMPLE_INPUT)
+Manhattan distance of final pos:  25
+Manhattan distance of final pos with waypoint:  286
 """
+
 from pathlib import Path
-import itertools
-import functools
-import re
-import collections
+import sys
 import math
 
+INPUT = (Path(__file__).parent / "input").read_text()
 
-def yield_nav_commands():
-    input_path = Path(__file__).parent / "input"
-    with input_path.open() as input_file:
-        for line in input_file:
-            line = line.strip()
-            if not line:
-                continue
-            yield line[0], int(line[1:])
+EXAMPLE_INPUT = """
+F10
+N3
+F7
+R90
+F11
+"""
+
+
+def yield_nav_commands(puzzle_input):
+    """Yield an (action_char, value) tuple per line."""
+    for line in puzzle_input.strip().split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        yield line[0], int(line[1:])
 
 
 HEADINGS = ["E", "S", "W", "N"]
 
+
 def process_nav_commands(nav_commands, heading="E"):
-    """
-    Apply all nav commands and return final position
-    """
+    """Apply all nav commands and return final position."""
     current = [0, 0]
     for command, value in nav_commands:
         if command == "F":
@@ -44,6 +59,7 @@ def process_nav_commands(nav_commands, heading="E"):
 
 
 def rotate_vector(vector, degrees):
+    """Return the [x,y] vector rotated by `degrees`."""
     angle = math.radians(degrees)
     return [
         round(vector[0] * math.cos(angle) - vector[1] * math.sin(angle)),
@@ -52,9 +68,7 @@ def rotate_vector(vector, degrees):
 
 
 def process_waypoint_nav_commands(nav_commands, waypoint):
-    """
-    Apply all nav commands and return final position. Use waypoint movement.
-    """
+    """Apply all nav commands and return final position. Use waypoint movement."""
     current = [0, 0]
     for command, value in nav_commands:
         if command == "F":
@@ -72,8 +86,9 @@ def process_waypoint_nav_commands(nav_commands, waypoint):
     return current
 
 
-def main():
-    input_list = list(yield_nav_commands())
+def main(puzzle_input=INPUT):
+    """Find solutions to both parts of the puzzle based on puzzle_input."""
+    input_list = list(yield_nav_commands(puzzle_input))
     final_pos = process_nav_commands(input_list, heading="E")
     manhattan = abs(final_pos[0]) + abs(final_pos[1])
     print("Manhattan distance of final pos: ", manhattan)
@@ -83,4 +98,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(INPUT if 'x' not in sys.argv else EXAMPLE_INPUT)
