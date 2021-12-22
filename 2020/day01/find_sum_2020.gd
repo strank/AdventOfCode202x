@@ -112,8 +112,8 @@ func find_3sum(in_numbers: Array[int]) -> Array[int]:
     return []
 
 
+## Find solutions to both parts of the puzzle based on puzzle_input.
 func main(puzzle_input: String):
-    ### Find solutions to both parts of the puzzle based on puzzle_input.
     var numbers = get_ints(puzzle_input)
     var two_sum = find_2sum(numbers)
     print("2sum %s product: %s" % [two_sum, two_sum[0] * two_sum[1]])
@@ -121,11 +121,11 @@ func main(puzzle_input: String):
     print("3sum %s product: %s" % [three_sum, three_sum[0] * three_sum[1] * three_sum[2]])
 
 
+## constructor callback, here used as main entry-point.
 func _initialize():
-    ### constructor callback
     main(INPUT if 'x' not in OS.get_cmdline_args() else EXAMPLE_INPUT)
 
 
+## Request quitting main loop immediately by returning true.
 func _process(_delta: float) -> bool:
-    ### -> quit main loop immediately by returning true
     return true
