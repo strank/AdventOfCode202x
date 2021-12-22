@@ -36,6 +36,7 @@ def yield_ints(puzzle_input):
 
 
 def find_2sum(in_numbers):
+    """Return tuple of two numbers that sum to 2020."""
     numbers = []
     for new_number in in_numbers:
         for number in numbers:
@@ -45,6 +46,7 @@ def find_2sum(in_numbers):
 
 
 def find_3sum(in_numbers):
+    """Return tuple of three numbers that sum to 2020."""
     numbers = []
     for new_number in in_numbers:
         for two_numbers in combinations(numbers, 2):
