@@ -101,14 +101,11 @@ func sum(arr: Array) -> int:
     return result
 
 
-## Return tuple of three numbers that sum to 2020.
-func find_3sum(in_numbers: Array[int]) -> Array[int]:
-    var numbers = []
-    for new_number in in_numbers:
-        for two_numbers in Combinations.new(numbers, 2):
-            if new_number + sum(two_numbers) == 2020:
-                return [new_number, two_numbers[0], two_numbers[1]]
-        numbers.append(new_number)
+## Return array of `num` numbers that sum to target.
+func find_sum(numbers: Array[int], num: int, target: int) -> Array[int]:
+    for sum_numbers in Combinations.new(numbers, num):
+        if sum(sum_numbers) == target:
+            return sum_numbers
     return []
 
 
@@ -117,7 +114,7 @@ func main(puzzle_input: String):
     var numbers = get_ints(puzzle_input)
     var two_sum = find_2sum(numbers)
     print("2sum %s product: %s" % [two_sum, two_sum[0] * two_sum[1]])
-    var three_sum = find_3sum(numbers)
+    var three_sum = find_sum(numbers, 3, 2020)
     print("3sum %s product: %s" % [three_sum, three_sum[0] * three_sum[1] * three_sum[2]])
 
 
