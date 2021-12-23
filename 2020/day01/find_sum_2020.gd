@@ -72,8 +72,8 @@ class Combinations:
         return self.length <= self.len_arr
 
     func _iter_next(_arg) -> bool:
-        var found_i = -1
-        var to_check = range(length)
+        var found_i := -1
+        var to_check := range(self.length)
         to_check.reverse()
         for i in to_check:
             if self.indices[i] != i + self.len_arr - self.length:
@@ -94,7 +94,7 @@ class Combinations:
 
 
 ## Return the sum of an array of int.
-func sum(arr: Array) -> int:
+func sum(arr: Array[int]) -> int:
     var result = 0
     for ele in arr:
         result += ele
@@ -112,7 +112,7 @@ func find_sum(numbers: Array[int], num: int, target: int) -> Array[int]:
 ## Find solutions to both parts of the puzzle based on puzzle_input.
 func main(puzzle_input: String):
     var numbers = get_ints(puzzle_input)
-    var two_sum = find_2sum(numbers)
+    var two_sum = find_sum(numbers, 2, 2020)
     print("2sum %s product: %s" % [two_sum, two_sum[0] * two_sum[1]])
     var three_sum = find_sum(numbers, 3, 2020)
     print("3sum %s product: %s" % [three_sum, three_sum[0] * three_sum[1] * three_sum[2]])
