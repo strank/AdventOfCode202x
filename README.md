@@ -60,4 +60,16 @@ Run only a specific with `-k` as above, e.g. `-k 21day04`.
 
 ## GDScript-based solutions
 
-TODO
+NOTE: I use a development build of Godot 4 which is unreleased and includes significant changes to GDScript! Replace the `godot` command with your own Godot 4 binary.
+
+Run any puzzle by directly running the GDScript file:
+
+    godot --headless --script 2021/day10/syntax_scoring.gd
+
+Add an `x` argument to use the example input of the puzzle instead of the full input.
+
+Run all tests / a specific one: TODO
+
+Get code improvement hints / linting / auto-format code: TODO
+
+Run all benchmarks / a specific one: TODO
