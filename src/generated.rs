@@ -31,6 +31,8 @@ pub mod year2021day06;
 pub mod year2021day07;
 #[path = "../2021/day08/seven_segment_search.rs"]
 pub mod year2021day08;
+#[path = "../2021/day12/passage_pathing.rs"]
+pub mod year2021day12;
 
 pub fn get_years() -> [usize; 2] {
     [2020, 2021]
@@ -107,6 +109,10 @@ pub fn get_days(year: usize) -> [Option<AOCRunFns>; 26] {
             days[8] = Some(AOCRunFns {
                 run: year2021day08::run,
                 example: year2021day08::run_example,
+            });
+            days[12] = Some(AOCRunFns {
+                run: year2021day12::run,
+                example: year2021day12::run_example,
             });
         }
         _ => {}
