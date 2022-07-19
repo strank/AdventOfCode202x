@@ -35,6 +35,8 @@ pub mod year2021day08;
 pub mod year2021day12;
 #[path = "../2021/day13/transparent_origami.rs"]
 pub mod year2021day13;
+#[path = "../2021/day14/extended_polymerization.rs"]
+pub mod year2021day14;
 
 pub fn get_years() -> [usize; 2] {
     [2020, 2021]
@@ -119,6 +121,10 @@ pub fn get_days(year: usize) -> [Option<AOCRunFns>; 26] {
             days[13] = Some(AOCRunFns {
                 run: year2021day13::run,
                 example: year2021day13::run_example,
+            });
+            days[14] = Some(AOCRunFns {
+                run: year2021day14::run,
+                example: year2021day14::run_example,
             });
         }
         _ => {}
