@@ -18,7 +18,7 @@ fn write_generated_module(
     for year_entry in &entries {
         writeln!(file, "// year {}", year_entry)?;
         for path_buf in &filemap[year_entry] {
-            let path_str = path_buf.to_str().unwrap().replace("\\", "/");
+            let path_str = path_buf.to_str().unwrap().replace('\\', "/");
             writeln!(file, "#[path = \"../{}\"]", path_str)?;
             writeln!(
                 file,
@@ -58,7 +58,7 @@ fn write_generated_module(
     for year_entry in &entries {
         writeln!(file, "        {} => {{", year_entry)?;
         for path_buf in &filemap[year_entry] {
-            let path_str = path_buf.to_str().unwrap().replace("\\", "/");
+            let path_str = path_buf.to_str().unwrap().replace('\\', "/");
             writeln!(
                 file,
                 "            days[{}] = Some(AOCRunFns {{",
