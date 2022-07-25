@@ -37,6 +37,10 @@ pub mod year2021day12;
 pub mod year2021day13;
 #[path = "../2021/day14/extended_polymerization.rs"]
 pub mod year2021day14;
+#[path = "../2021/day15/chiton.rs"]
+pub mod year2021day15;
+#[path = "../2021/day16/packet_decoder.rs"]
+pub mod year2021day16;
 
 pub fn get_years() -> [usize; 2] {
     [2020, 2021]
@@ -125,6 +129,14 @@ pub fn get_days(year: usize) -> [Option<AOCRunFns>; 26] {
             days[14] = Some(AOCRunFns {
                 run: year2021day14::run,
                 example: year2021day14::run_example,
+            });
+            days[15] = Some(AOCRunFns {
+                run: year2021day15::run,
+                example: year2021day15::run_example,
+            });
+            days[16] = Some(AOCRunFns {
+                run: year2021day16::run,
+                example: year2021day16::run_example,
             });
         }
         _ => {}
