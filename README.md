@@ -60,7 +60,7 @@ Run only a specific with `-k` as above, e.g. `-k 21day04`.
 
 ## GDScript-based solutions
 
-NOTE: I use a development build of Godot 4 which is unreleased and includes significant changes to GDScript! Replace the `godot` command with your own Godot 4 binary.
+NOTE: I use a development build of Godot 4 which is unreleased and includes some fixes to GDScript not in Godot's main line yet! Replace the `godot` command with your own Godot 4 binary.
 
 Run any puzzle by directly running the GDScript file:
 

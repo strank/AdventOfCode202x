@@ -12,7 +12,9 @@
 
 extends MainLoop
 
-var INPUT = read_input(self.get_script().get_path().get_base_dir() + "/input")
+var INPUT: String:
+    get:
+        return read_input(self.get_script().get_path().get_base_dir() + "/input")
 
 const EXAMPLE_INPUT = """
 1721
