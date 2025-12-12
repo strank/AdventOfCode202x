@@ -67,9 +67,12 @@ pub mod year2024day06;
 pub mod year2024day07;
 #[path = "../2024/day08/resonant_collinearity.rs"]
 pub mod year2024day08;
+// year 2025
+#[path = "../2025/day01/secret_entrance.rs"]
+pub mod year2025day01;
 
-pub fn get_years() -> [usize; 4] {
-    [2015, 2020, 2021, 2024]
+pub fn get_years() -> [usize; 5] {
+    [2015, 2020, 2021, 2024, 2025]
 }
 
 pub type RunFn = fn() -> String;
@@ -215,6 +218,12 @@ pub fn get_days(year: usize) -> [Option<AOCRunFns>; 26] {
             days[8] = Some(AOCRunFns {
                 run: year2024day08::run,
                 example: year2024day08::run_example,
+            });
+        }
+        2025 => {
+            days[1] = Some(AOCRunFns {
+                run: year2025day01::run,
+                example: year2025day01::run_example,
             });
         }
         _ => {}
