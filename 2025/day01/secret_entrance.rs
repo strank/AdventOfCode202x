@@ -1,5 +1,5 @@
 //! https://adventofcode.com/2025/day/01
-//! Find password on rotary dial
+//! Find password which is the count of hitting zero on a rotary dial
 //!
 //! ```
 //! use advent_of_code_202x::generated::year2025day01::run;
@@ -12,7 +12,7 @@ const INPUT: &str = include_str!("input");
 
 /// ```
 /// use advent_of_code_202x::generated::year2025day01::run_example;
-/// assert!(run_example().contains("Password:  3\nMethod 0x43: 6"));
+/// assert!(run_example().contains("Password: 3\nMethod 0x43: 6"));
 /// ```
 const EXAMPLE_INPUT: &str = "
 L68
@@ -29,23 +29,19 @@ L82
 
 /// Need a u8 variant that wraps around modulo 100
 #[derive(Debug, Copy, Clone, PartialEq)]
-struct NumberMod<const N: u8> {
+struct U8Mod<const N: u8> {
     value: u8,
 }
 
-impl<const N: u8> NumberMod<N> {
+impl<const N: u8> U8Mod<N> {
     fn new(value: i32) -> Self {
         Self {
             value: value.rem_euclid(N as i32) as u8,
         }
     }
-
-    fn zero() -> Self {
-        Self { value: 0 }
-    }
 }
 
-impl<const N: u8> Add for NumberMod<N> {
+impl<const N: u8> Add for U8Mod<N> {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
@@ -55,7 +51,7 @@ impl<const N: u8> Add for NumberMod<N> {
     }
 }
 
-impl<const N: u8> Neg for NumberMod<N> {
+impl<const N: u8> Neg for U8Mod<N> {
     type Output = Self;
 
     fn neg(self) -> Self {
@@ -65,7 +61,7 @@ impl<const N: u8> Neg for NumberMod<N> {
     }
 }
 
-impl<const N: u8> Sub for NumberMod<N> {
+impl<const N: u8> Sub for U8Mod<N> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
@@ -73,27 +69,22 @@ impl<const N: u8> Sub for NumberMod<N> {
     }
 }
 
-impl<const N: u8> NumberMod<N> {
-    fn new_zero_trans(value: i32) -> (Self, u32) {
-        (
-            Self {
-                value: value.rem_euclid(N as i32) as u8,
-            },
-            (value / N as i32) as u32,
-        )
+impl<const N: u8> U8Mod<N> {
+    fn new_with_zero_trans_count(value: i32) -> (Self, u32) {
+        (Self::new(value), (value / N as i32) as u32)
     }
 
     fn add_zero_trans(self, other: Self) -> (Self, u32) {
         (
             self + other,
-            if self.value + other.value > N { 1 } else { 0 },
+            if self.value + other.value >= N { 1 } else { 0 },
         )
     }
 
     fn sub_zero_trans(self, other: Self) -> (Self, u32) {
         (
             self - other,
-            if self.value != 0 && (self.value as i16) - (other.value as i16) < 0 {
+            if self.value != 0 && (self.value as i16) - (other.value as i16) <= 0 {
                 1
             } else {
                 0
@@ -102,8 +93,34 @@ impl<const N: u8> NumberMod<N> {
     }
 }
 
+type DialPos = U8Mod<100>;
+
 fn str_to_i32(a_str: &str) -> i32 {
     a_str.parse::<i32>().unwrap()
+}
+
+fn rotate_dial(dial_pos: DialPos, direction: char, amount: i32) -> DialPos {
+    let amount = DialPos::new(amount);
+    if direction == 'R' {
+        dial_pos + amount
+    } else {
+        dial_pos - amount
+    }
+}
+
+fn rotate_dial_with_zero_trans_count(
+    mut dial_pos: DialPos,
+    direction: char,
+    amount: i32,
+) -> (DialPos, u32) {
+    let (amount, zero_trans_count_1) = DialPos::new_with_zero_trans_count(amount);
+    let zero_trans_count_2;
+    if direction == 'R' {
+        (dial_pos, zero_trans_count_2) = dial_pos.add_zero_trans(amount);
+    } else {
+        (dial_pos, zero_trans_count_2) = dial_pos.sub_zero_trans(amount);
+    }
+    (dial_pos, zero_trans_count_1 + zero_trans_count_2)
 }
 
 pub fn process_input(input: &'static str) -> String {
@@ -116,42 +133,26 @@ pub fn process_input(input: &'static str) -> String {
             (first, chars.as_str())
         })
         .collect();
-    println!("rotations: {:?}", rotations);
-    let mut passw = 0u32;
-    let mut current = NumberMod::<100>::new(50);
+    //println!("rotations: {:?}", rotations);
+    let mut zero_count = 0u32;
+    let mut dial_pos = DialPos::new(50);
     for rot in rotations.clone().iter() {
-        if rot.0 == 'R' {
-            current = current + NumberMod::<100>::new(str_to_i32(rot.1));
-        } else {
-            current = current - NumberMod::<100>::new(str_to_i32(rot.1));
-        }
-        print!(" {:?} ", current.value);
-        if current == NumberMod::<100>::zero() {
-            passw += 1;
+        dial_pos = rotate_dial(dial_pos, rot.0, str_to_i32(rot.1));
+        if dial_pos.value == 0 {
+            zero_count += 1;
         }
     }
-    let mut passw_method_0x = 0u32;
-    let mut current = NumberMod::<100>::new(50);
-    print!("Starting with {:?}\n", current.value);
+    let mut zero_count_method_0x = 0u32;
+    let mut dial_pos = DialPos::new(50);
     for rot in rotations.iter() {
-        let (next_num, mut zero_trans_count) = NumberMod::<100>::new_zero_trans(str_to_i32(rot.1));
-        passw_method_0x += zero_trans_count;
-        print!(" {:?}{:?} (z{:?})", rot.0, next_num.value, zero_trans_count);
-        if rot.0 == 'R' {
-            (current, zero_trans_count) = current.add_zero_trans(next_num);
-        } else {
-            (current, zero_trans_count) = current.sub_zero_trans(next_num);
-        }
-        passw_method_0x += zero_trans_count;
-        print!(" -> {:?} (z{:?})", current.value, zero_trans_count);
-        if current == NumberMod::<100>::zero() {
-            passw_method_0x += 1;
-            print!(" z1");
-        }
+        let zero_trans_count;
+        (dial_pos, zero_trans_count) =
+            rotate_dial_with_zero_trans_count(dial_pos, rot.0, str_to_i32(rot.1));
+        zero_count_method_0x += zero_trans_count;
     }
     format!(
         "Password: {:?}\nMethod 0x43: {:?}\n",
-        passw, passw_method_0x
+        zero_count, zero_count_method_0x
     )
 }
 
