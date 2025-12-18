@@ -35,7 +35,7 @@ fn write_generated_module(
     writeln!(file)?;
     writeln!(file, "pub type RunFn = fn() -> String;")?;
     writeln!(file)?;
-    writeln!(file, "#[derive(PartialEq, Copy, Clone)]")?;
+    writeln!(file, "#[derive(Copy, Clone)]")?;
     writeln!(file, "pub struct AOCRunFns {{")?;
     writeln!(file, "    pub run: RunFn,")?;
     writeln!(file, "    pub example: RunFn,")?;

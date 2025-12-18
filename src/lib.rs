@@ -19,7 +19,7 @@ pub fn run_puzzles(year_arg: Option<&String>, day_arg: Option<&String>, use_exam
             // find last element in array that is not None (i.e.: first Some)
             days.iter()
                 .enumerate()
-                .filter(|(_, d)| d != &&None)
+                .filter(|(_, d)| d.is_some())
                 .last()
                 .unwrap()
                 .0

@@ -79,7 +79,7 @@ pub fn get_years() -> [usize; 5] {
 
 pub type RunFn = fn() -> String;
 
-#[derive(PartialEq, Copy, Clone)]
+#[derive(Copy, Clone)]
 pub struct AOCRunFns {
     pub run: RunFn,
     pub example: RunFn,
