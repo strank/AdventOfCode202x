@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2024day06::run;
 //! assert!(run().contains(
-//!     "squares visited: 5131\nblock options: ???"));
+//!     "squares visited: 5131\nblock options: 1784"));
 //! ```
 
 use ndarray::prelude::*;

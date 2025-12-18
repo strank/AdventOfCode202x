@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2024day02::run;
 //! assert!(run().contains(
-//!     "safe reports: 526\ndampened: xxx"));
+//!     "safe reports: 526\ndampened: 566"));
 //! ```
 
 use itertools::Itertools;
@@ -16,7 +16,7 @@ const INPUT: &str = include_str!("input");
 /// ```
 /// use advent_of_code_202x::generated::year2024day02::run_example;
 /// assert!(run_example().contains(
-///     "safe reports: 2\ndampened: xxx"));
+///     "safe reports: 2\ndampened: 4"));
 /// ```
 const EXAMPLE_INPUT: &str = "
 7 6 4 2 1

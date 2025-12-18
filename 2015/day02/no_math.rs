@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2015day02::run;
 //! assert!(run().contains(
-//!     "area needed: xxx\ndodont result: 70478672"));
+//!     "area needed: 1588178\nlength needed: 3783758"));
 //! ```
 
 use itertools::Itertools;
@@ -16,7 +16,7 @@ const INPUT: &str = include_str!("input");
 /// ```
 /// use advent_of_code_202x::generated::year2015day02::run_example;
 /// assert!(run_example().contains(
-///     "area needed: 101\ndodont result: 48"));
+///     "area needed: 101\nlength needed: 48"));
 /// ```
 const EXAMPLE_INPUT: &str = "
 2x3x4

@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2024day05::run;
 //! assert!(run().contains(
-//!     "sum of middles: 5955\nsum of sorted middles: ???"));
+//!     "sum of middles: 5955\nsum of sorted middles: 4030"));
 //! ```
 
 use itertools::Itertools;

@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2015day01::run;
 //! assert!(run().contains(
-//!     "floor: xxx\ndampened: xxx"));
+//!     "floor: 74\nbasement index: 1795"));
 //! ```
 
 const INPUT: &str = include_str!("input");
@@ -14,7 +14,7 @@ const INPUT: &str = include_str!("input");
 /// ```
 /// use advent_of_code_202x::generated::year2015day01::run_example;
 /// assert!(run_example().contains(
-///     "floor: 3\ndampened: xxx"));
+///     "floor: 3\nbasement index: 7"));
 /// ```
 const EXAMPLE_INPUT: &str = "(()(()(";
 

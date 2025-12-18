@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2024day07::run;
 //! assert!(run().contains(
-//!     "sum calibrated: 1289579105366\nsum extended: ???"));
+//!     "sum calibrated: 1289579105366\nsum extended: 92148721834692"));
 //! ```
 
 use itertools::{repeat_n, Itertools};
@@ -16,7 +16,7 @@ const INPUT: &str = include_str!("input");
 /// ```
 /// use advent_of_code_202x::generated::year2024day07::run_example;
 /// assert!(run_example().contains(
-///     "sum calibrated: 3749\nsum extended: "));
+///     "sum calibrated: 3749\nsum extended: 11387"));
 /// ```
 const EXAMPLE_INPUT: &str = "
 190: 10 19

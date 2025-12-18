@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2024day04::run;
 //! assert!(run().contains(
-//!     "num of xmas's: 2633\nno of x-mas's: ???"));
+//!     "num of xmas's: 2633\nnum of x-mas's: 1936"));
 //! ```
 
 use itertools::iproduct;
@@ -18,7 +18,7 @@ const INPUT: &str = include_str!("input");
 /// ```
 /// use advent_of_code_202x::generated::year2024day04::run_example;
 /// assert!(run_example().contains(
-///     "num of xmas's: 18\nno of x-mas's: 9"));
+///     "num of xmas's: 18\nnum of x-mas's: 9"));
 /// ```
 const EXAMPLE_INPUT: &str = "
 MMMSXXMASM

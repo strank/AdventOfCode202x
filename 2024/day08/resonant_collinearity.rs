@@ -5,7 +5,7 @@
 //! ```
 //! use advent_of_code_202x::generated::year2024day08::run;
 //! assert!(run().contains(
-//!     "num antinodes: 276\nnum extended: ???"));
+//!     "num antinodes: 276\nnum extended: 991"));
 //! ```
 
 use itertools::Itertools;
@@ -187,7 +187,7 @@ pub fn process_input(input: &str) -> String {
     let num_antipodes: usize = antenna_map.get_antinodes().len();
     let num_extended: usize = antenna_map.get_extended_antinodes().len();
     format!(
-        "num antinodes: {}\nsum extended: {}",
+        "num antinodes: {}\nnum extended: {}",
         num_antipodes, num_extended
     )
 }
