@@ -29,41 +29,34 @@ fn find_invalid_ids(range_start: &str, range_end: &str) -> Vec<u64> {
     let range_len = range_start.len();
     if range_len == range_end.len() {
         if range_len % 2 != 0 {
-            //println!("Range starting at {} cannot contain any", range_start);
-            return vec![];
+            return vec![]; // cannot contain invalid ids
         }
-        // even length so split both start and end in two halfs:
+        // even length, so split both start and end in two halfs:
         let range_midpoint = range_len / 2;
-        let range_start_left = &range_start[..range_midpoint];
-        let range_start_right = &range_start[range_midpoint..];
-        let range_end_left = &range_end[..range_midpoint];
-        let range_end_right = &range_end[range_midpoint..];
-        //println!(
-        //    "checking: {}|{} to {}|{}",
-        //    range_start_left, range_start_right, range_end_left, range_end_right,
-        //);
         // for every unique possibility for the left side, there is one possible invalid ID,
         // but the first and the last one of those is only in the range if range_start_right
         // is not too high and range_end_right is not too low respectively:
-        let mut begin = str_to_u64(range_start_left);
-        if begin < str_to_u64(range_start_right) {
+        let mut begin = str_to_u64(&range_start[..range_midpoint]);
+        let start_right = str_to_u64(&range_start[range_midpoint..]);
+        if begin < start_right {
             begin += 1;
         }
-        let mut end = str_to_u64(range_end_left);
-        if end <= str_to_u64(range_end_right) {
+        let mut end = str_to_u64(&range_end[..range_midpoint]);
+        let end_right = str_to_u64(&range_end[range_midpoint..]);
+        if end <= end_right {
             end += 1;
         }
         (begin..end)
-            .map(|left_side| left_side * 10u64.pow(range_midpoint as u32) + left_side)
+            .map(|pt| pt * 10u64.pow(range_midpoint as u32) + pt)
             .collect()
     } else {
         // if not, split it into multiple ranges with the same length and recursively call this method
-        let mut result = find_invalid_ids(range_start, &"9".repeat(range_len));
-        result.extend(find_invalid_ids(
-            &("1".to_owned() + &"0".repeat(range_len)),
-            range_end,
-        ));
-        result
+        let mid_range_end = &"9".repeat(range_len);
+        let mid_range_start = &("1".to_owned() + &"0".repeat(range_len));
+        find_invalid_ids(range_start, mid_range_end)
+            .into_iter()
+            .chain(find_invalid_ids(mid_range_start, range_end))
+            .collect()
     }
 }
 
@@ -90,17 +83,17 @@ fn find_invalid_ids_new_rules(range_start: &str, range_end: &str) -> Vec<u64> {
                     // and filter out the ones that are too big or too small:
                     .filter(|&pti| pti >= start && pti <= end)
             })
-            // and no duplicates
+            // and no duplicates:
             .unique()
             .collect()
     } else {
         // if not, split it into multiple ranges with the same length and recursively call this method
-        let mut result = find_invalid_ids_new_rules(range_start, &"9".repeat(range_len));
-        result.extend(find_invalid_ids_new_rules(
-            &("1".to_owned() + &"0".repeat(range_len)),
-            range_end,
-        ));
-        result
+        let mid_range_end = &"9".repeat(range_len);
+        let mid_range_start = &("1".to_owned() + &"0".repeat(range_len));
+        find_invalid_ids_new_rules(range_start, mid_range_end)
+            .into_iter()
+            .chain(find_invalid_ids_new_rules(mid_range_start, range_end))
+            .collect()
     }
 }
 
