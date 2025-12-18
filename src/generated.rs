@@ -70,6 +70,8 @@ pub mod year2024day08;
 // year 2025
 #[path = "../2025/day01/secret_entrance.rs"]
 pub mod year2025day01;
+#[path = "../2025/day02/gift_shop.rs"]
+pub mod year2025day02;
 
 pub fn get_years() -> [usize; 5] {
     [2015, 2020, 2021, 2024, 2025]
@@ -224,6 +226,10 @@ pub fn get_days(year: usize) -> [Option<AOCRunFns>; 26] {
             days[1] = Some(AOCRunFns {
                 run: year2025day01::run,
                 example: year2025day01::run_example,
+            });
+            days[2] = Some(AOCRunFns {
+                run: year2025day02::run,
+                example: year2025day02::run_example,
             });
         }
         _ => {}
